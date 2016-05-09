@@ -15,6 +15,10 @@ import java.util.ArrayList;
  */
 public abstract class DatabaseHandler {
     
+    // 1 --> Sqlite
+    // 2 --> MySql
+    public static final int DATABASE_TYPE = 1;
+    
     /**
      * Función que se encarga de hacer un cast al objeto apropiado en caso que se reciba un objeto genérico.
      * @param c Conexión a la base de datos.
@@ -120,7 +124,18 @@ public abstract class DatabaseHandler {
         return rs;
     }
     
-    
+    /**
+     * Función que devuelve el tipo de base de datos a usar dependiendo de la constante declarada en esta misma clase.
+     * @return Tipo de base de datos a usar.
+     */
+    public static Object connect() {
+        if (DATABASE_TYPE == 1) {
+            return new Sqlite();
+        } else if (DATABASE_TYPE == 2) {
+//            return new MySql();
+        }
+        return null;
+    }
     
     /**
      * Consigue una conexión a la base de datos.
