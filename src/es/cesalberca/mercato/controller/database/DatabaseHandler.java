@@ -14,10 +14,8 @@ import java.util.ArrayList;
  * @author César Alberca
  */
 public abstract class DatabaseHandler {
-    
-    // 1 --> Sqlite
-    // 2 --> MySql
-    public static final int DATABASE_TYPE = 1;
+
+    public static String DATABASE_TYPE = "sqlite";
     
     /**
      * Función que se encarga de hacer un cast al objeto apropiado en caso que se reciba un objeto genérico.
@@ -100,10 +98,10 @@ public abstract class DatabaseHandler {
      * @return
      * @throws SQLException 
      */
-    public ResultSet search(Connection c, Object obj) throws SQLException {
+    public static ResultSet search(Connection c, Object obj) throws SQLException {
         ResultSet rs = null;
         if (obj instanceof User) {
-            rs = this.search(c, (User) obj);
+            rs = DatabaseHandler.search(c, (User) obj);
         } 
         return rs;
    }
@@ -115,7 +113,7 @@ public abstract class DatabaseHandler {
      * @return
      * @throws SQLException 
      */
-    public ResultSet search(Connection c, User searchedUser) throws SQLException {
+    public static ResultSet search(Connection c, User searchedUser) throws SQLException {
         PreparedStatement ps = null;
         String selectSQL = "SELECT * FROM USER WHERE NAME LIKE ?";
         ps = c.prepareStatement(selectSQL);
@@ -128,10 +126,11 @@ public abstract class DatabaseHandler {
      * Función que devuelve el tipo de base de datos a usar dependiendo de la constante declarada en esta misma clase.
      * @return Tipo de base de datos a usar.
      */
-    public static Object connect() {
-        if (DATABASE_TYPE == 1) {
-            return new Sqlite();
-        } else if (DATABASE_TYPE == 2) {
+    public static Connection connect() throws ClassNotFoundException, SQLException {
+        if (DATABASE_TYPE.equals("sqlite")) {
+            Sqlite sqlite = new Sqlite();
+            return sqlite.getConnection();
+        } else if (DATABASE_TYPE.equals("mysql")) {
 //            return new MySql();
         }
         return null;
@@ -150,5 +149,7 @@ public abstract class DatabaseHandler {
      * @param c Conexión la cual se debe desconectar.
      * @throws SQLException Error al desconectar.
      */
-    public abstract void disconnect(Connection c) throws SQLException;
+    public static void disconnect(Connection c) throws SQLException {
+        c.close();
+    }
 }

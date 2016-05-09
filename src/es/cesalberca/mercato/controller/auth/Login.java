@@ -15,20 +15,18 @@ public class Login {
     public static int tries = 3;
     
     public static Boolean isValidUser(User userTryingToLogin) throws SQLException, ClassNotFoundException {
-        ResultSet rs;
+        Connection c = null;
+        ResultSet rs = null;
         User user = null;
-        Object db = DatabaseHandler.connect();
+        c = DatabaseHandler.connect();
         
-        if (db instanceof Sqlite) {
-            Connection c = ((Sqlite) db).getConnection();
-            rs = db.search(c, userTryingToLogin);
-        }
+        DatabaseHandler.search(c, userTryingToLogin);
         
         while (rs.next()) {
             user = new User(rs.getString("NAME"), rs.getString("PASSWORD"));
         }
         
-        sqlite.disconnect(c);
+        DatabaseHandler.disconnect(c);
         
         if (user != null && userTryingToLogin.getPassword().equals(user.getPassword())) {
             return true;

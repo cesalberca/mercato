@@ -19,9 +19,4 @@ public class Sqlite extends DatabaseHandler{
         c = DriverManager.getConnection(this.JDBC_CONNECTION + this.SQLITE_DIRECTORY);
         return c;
     }
-
-    @Override
-    public void disconnect(Connection c) throws SQLException{
-        c.close();
-    }
 }
