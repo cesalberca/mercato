@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * Clase que representa la entidad Usuario, el cual es cliente. Éste puede tener pedidos a su nombre.
  * @author César Alberca
  */
-public class User extends DatabaseObject {
+public class User {
     private String name;
     private String password;
     private ArrayList<Order> orders;

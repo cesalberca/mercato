@@ -10,6 +10,7 @@ import es.cesalberca.mercato.model.Category;
 import es.cesalberca.mercato.model.Item;
 import es.cesalberca.mercato.model.Order;
 import es.cesalberca.mercato.model.User;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -78,7 +79,10 @@ public class JFApp extends javax.swing.JFrame {
         User user = new User("César", "23234");
         Order order = new Order(items, user);
         try {
-            user.save(user);
+//            user.save(user);
+            Sqlite sqlite = new Sqlite();
+            Connection c = sqlite.getConnection();
+            sqlite.insertInto(c, user);
             JOptionPane.showMessageDialog(null, "Usuario guardado con éxito");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);

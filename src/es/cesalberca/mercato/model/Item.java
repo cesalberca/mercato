@@ -6,7 +6,7 @@ import java.sql.SQLException;
  * Clase que representa un producto que puede ser añadido a la cesta de la compra.
  * @author César Alberca
  */
-public class Item extends DatabaseObject {
+public class Item {
     private String name;
     private float prize;
     private Category category;

@@ -6,7 +6,7 @@ import java.util.ArrayList;
  *
  * @author César Alberca
  */
-public class Order extends DatabaseObject {
+public class Order {
     private float totalPrize = 0;
     private ArrayList<Item> items;
     private User user;
