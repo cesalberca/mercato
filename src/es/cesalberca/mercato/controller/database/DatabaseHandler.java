@@ -3,6 +3,8 @@ package es.cesalberca.mercato.controller.database;
 import es.cesalberca.mercato.model.Item;
 import es.cesalberca.mercato.model.Order;
 import es.cesalberca.mercato.model.User;
+import es.cesalberca.mercato.model.database.Mysql;
+import es.cesalberca.mercato.model.database.Sqlite;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -121,28 +123,16 @@ public abstract class DatabaseHandler {
         ResultSet rs = ps.executeQuery( );
         return rs;
     }
-    
-    /**
-     * Función que devuelve el tipo de base de datos a usar dependiendo de la constante declarada en esta misma clase.
-     * @return Tipo de base de datos a usar.
-     */
-    public static Connection connect() throws ClassNotFoundException, SQLException {
-        if (DATABASE_TYPE.equals("sqlite")) {
-            Sqlite sqlite = new Sqlite();
-            return sqlite.getConnection();
-        } else if (DATABASE_TYPE.equals("mysql")) {
-//            return new MySql();
-        }
-        return null;
-    }
-    
+        
     /**
      * Consigue una conexión a la base de datos.
      * @return Conexión a la base de datos.
      * @throws ClassNotFoundException Clase no encontrada.
      * @throws SQLException Error al conectarse.
      */
-    public abstract Connection getConnection() throws ClassNotFoundException, SQLException;
+    public abstract Connection getConnection(Sqlite sqlite) throws ClassNotFoundException, SQLException;
+    
+    public abstract Connection getConnection(Mysql mysql) throws ClassNotFoundException, SQLException;
    
     /**
      * Desconecta de la bbdd habiéndole dado la conexión.
@@ -151,5 +141,9 @@ public abstract class DatabaseHandler {
      */
     public static void disconnect(Connection c) throws SQLException {
         c.close();
+    }
+
+    public static String getDATABASE_TYPE() {
+        return DATABASE_TYPE;
     }
 }

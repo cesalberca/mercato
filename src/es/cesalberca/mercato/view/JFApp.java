@@ -5,7 +5,7 @@
  */
 package es.cesalberca.mercato.view;
 
-import es.cesalberca.mercato.controller.database.Sqlite;
+import es.cesalberca.mercato.controller.database.DatabaseConnector;
 import es.cesalberca.mercato.model.Category;
 import es.cesalberca.mercato.model.Item;
 import es.cesalberca.mercato.model.Order;
@@ -80,7 +80,7 @@ public class JFApp extends javax.swing.JFrame {
         Order order = new Order(items, user);
         try {
 //            user.save(user);
-            Sqlite sqlite = new Sqlite();
+            DatabaseConnector sqlite = new DatabaseConnector();
             Connection c = sqlite.getConnection();
             sqlite.insertInto(c, user);
             JOptionPane.showMessageDialog(null, "Usuario guardado con éxito");

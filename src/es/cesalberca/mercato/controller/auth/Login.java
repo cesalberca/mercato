@@ -1,8 +1,9 @@
 package es.cesalberca.mercato.controller.auth;
 
 import es.cesalberca.mercato.controller.database.DatabaseHandler;
-import es.cesalberca.mercato.controller.database.Sqlite;
+import es.cesalberca.mercato.controller.database.DatabaseConnector;
 import es.cesalberca.mercato.model.User;
+import es.cesalberca.mercato.model.database.Sqlite;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,8 +19,9 @@ public class Login {
         Connection c = null;
         ResultSet rs = null;
         User user = null;
-        c = DatabaseHandler.connect();
-        
+        DatabaseConnector dbc = new DatabaseConnector();
+        dbc.getConnection(new Sqlite());
+        c = dbc.getConnection(new Sqlite());
         DatabaseHandler.search(c, userTryingToLogin);
         
         while (rs.next()) {
