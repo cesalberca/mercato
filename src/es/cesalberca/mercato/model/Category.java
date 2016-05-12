@@ -1,7 +1,6 @@
 package es.cesalberca.mercato.model;
 
 import es.cesalberca.mercato.controller.database.DatabaseConnector;
-import es.cesalberca.mercato.model.database.Sqlite;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -40,11 +39,8 @@ public class Category {
     public ArrayList<Category> retrieveCategoriesFromDB() throws ClassNotFoundException, SQLException {
         Connection c = null;
         Statement stmt = null;
-//        DatabaseConnector sqlite = new DatabaseConnector();
-//        ResultSet rs = sqlite.selectAll(c, this);
-//        c = sqlite.getConnection();
         DatabaseConnector dbc = new DatabaseConnector();
-        c = dbc.getConnection(new Sqlite());
+        c = dbc.getConnection();
         ResultSet rs = dbc.selectAll(c, this);
         return null;
     }

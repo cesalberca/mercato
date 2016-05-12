@@ -3,8 +3,6 @@ package es.cesalberca.mercato.controller.database;
 import es.cesalberca.mercato.model.Item;
 import es.cesalberca.mercato.model.Order;
 import es.cesalberca.mercato.model.User;
-import es.cesalberca.mercato.model.database.Mysql;
-import es.cesalberca.mercato.model.database.Sqlite;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,9 +14,6 @@ import java.util.ArrayList;
  * @author César Alberca
  */
 public abstract class DatabaseHandler {
-
-    public static String DATABASE_TYPE = "sqlite";
-    
     /**
      * Función que se encarga de hacer un cast al objeto apropiado en caso que se reciba un objeto genérico.
      * @param c Conexión a la base de datos.
@@ -130,20 +125,12 @@ public abstract class DatabaseHandler {
      * @throws ClassNotFoundException Clase no encontrada.
      * @throws SQLException Error al conectarse.
      */
-    public abstract Connection getConnection(Sqlite sqlite) throws ClassNotFoundException, SQLException;
+    public abstract Connection getNewConnection() throws ClassNotFoundException, SQLException;
     
-    public abstract Connection getConnection(Mysql mysql) throws ClassNotFoundException, SQLException;
-   
     /**
      * Desconecta de la bbdd habiéndole dado la conexión.
      * @param c Conexión la cual se debe desconectar.
      * @throws SQLException Error al desconectar.
      */
-    public static void disconnect(Connection c) throws SQLException {
-        c.close();
-    }
-
-    public static String getDATABASE_TYPE() {
-        return DATABASE_TYPE;
-    }
+    public abstract void disconnect(Connection c) throws SQLException;
 }

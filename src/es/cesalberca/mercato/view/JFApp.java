@@ -81,7 +81,7 @@ public class JFApp extends javax.swing.JFrame {
         try {
 //            user.save(user);
             DatabaseConnector sqlite = new DatabaseConnector();
-            Connection c = sqlite.getConnection();
+            Connection c = sqlite.getNewConnection();
             sqlite.insertInto(c, user);
             JOptionPane.showMessageDialog(null, "Usuario guardado con éxito");
         } catch (ClassNotFoundException ex) {
