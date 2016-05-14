@@ -35,7 +35,6 @@ public class JFApp extends javax.swing.JFrame {
         this.setVisible(true);
         try {
             DatabaseConnector.newConnection();
-            JOptionPane.showMessageDialog(null, "BBDD disponible");
         } catch (ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(null, "BBDD no disponible");
             Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);
@@ -60,6 +59,11 @@ public class JFApp extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jMenu1.setText("Archivo");
 
@@ -101,6 +105,18 @@ public class JFApp extends javax.swing.JFrame {
             Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jmiSaveActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        try {
+            if (DatabaseConnector.getConnection() != null) {
+                DatabaseConnector.disconnect();
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments

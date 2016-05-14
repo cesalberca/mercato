@@ -36,7 +36,7 @@ public class DatabaseConnector {
      * @param c Conexión la cual se debe desconectar.
      * @throws SQLException Error al desconectar.
      */
-    public static void disconnect(Connection c) throws SQLException {
-        c.close();
+    public static void disconnect() throws SQLException {
+        connection.close();
     }
 }

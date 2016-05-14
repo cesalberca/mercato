@@ -5,6 +5,11 @@
  */
 package es.cesalberca.mercato.view;
 
+import es.cesalberca.mercato.controller.auth.Signup;
+import es.cesalberca.mercato.model.User;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -17,35 +22,49 @@ import javax.swing.JTextField;
  */
 public class JPSignup extends javax.swing.JPanel {
 
+    Signup sg = null;
+
     /**
      * Creates new form JPSignup
      */
     public JPSignup() {
         initComponents();
+        sg = new Signup();
     }
-    
-    public static void signup(){
-      JTextField username = new JTextField(5);
-      JTextField password = new JTextField(5);
-      JTextField confirmPassword = new JTextField(5);
-      
 
-      JPanel myPanel = new JPanel();
-      myPanel.add(new JLabel("Usuario:"));
-      myPanel.add(username);
-      myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-      myPanel.add(new JLabel("Contraseña:"));
-      myPanel.add(password);
-      myPanel.add(new JLabel("Confirmar contraseña:"));
-      myPanel.add(confirmPassword);
+    public static void signup() {
+        JTextField username = new JTextField(5);
+        JTextField password = new JTextField(5);
+        JTextField confirmPassword = new JTextField(5);
 
-      int result = JOptionPane.showConfirmDialog(null, myPanel, 
-               "Registrar usuario", JOptionPane.OK_CANCEL_OPTION);
-      if (result == JOptionPane.OK_OPTION) {
-         System.out.println("x value: " + username.getText());
-         System.out.println("y value: " + password.getText());
-      }
-   }
+        JPanel myPanel = new JPanel();
+        myPanel.add(new JLabel("Usuario:"));
+        myPanel.add(username);
+        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
+        myPanel.add(new JLabel("Contraseña:"));
+        myPanel.add(password);
+        myPanel.add(new JLabel("Confirmar contraseña:"));
+        myPanel.add(confirmPassword);
+
+        int result = JOptionPane.showConfirmDialog(null, myPanel,
+                "Registrar usuario", JOptionPane.OK_CANCEL_OPTION);
+        if (result == JOptionPane.OK_OPTION && password.getText().equals(confirmPassword.getText())) {
+            User userTryingToSignup = new User(username.getText(), password.getText());
+            try {
+                if (Signup.isUserAvailable(userTryingToSignup)) {
+                    Signup.register(userTryingToSignup);
+                    JOptionPane.showMessageDialog(null, "Usuario registrado con éxito");
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(JPSignup.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(JPSignup.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Contraseñas no coinciden");
+        }
+
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
