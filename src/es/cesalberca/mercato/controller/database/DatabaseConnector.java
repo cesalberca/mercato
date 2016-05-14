@@ -8,31 +8,35 @@ import java.sql.SQLException;
  *
  * @author César Alberca
  */
-public class DatabaseConnector extends DatabaseHandler{
+public class DatabaseConnector {
     private static final String SQLITE_DIRECTORY = "bbdd/mercatodb";
     private static final String JDBC_CONNECTION = "jdbc:sqlite:";
     private static Connection connection = null;
     
-    public DatabaseConnector() throws ClassNotFoundException, SQLException {
-        Class.forName("org.sqlite.JDBC");
-        connection = getNewConnection();
-    }
-
-    public static Connection getConnection() {
+    public static Connection getConnection() throws ClassNotFoundException, SQLException {
+//        if (connection == null) {
+//            newConnection();
+//        } 
         return connection;
     }
     
-    @Override
-    public Connection getNewConnection() throws ClassNotFoundException, SQLException {
-        Connection c = DriverManager.getConnection(JDBC_CONNECTION + SQLITE_DIRECTORY);
-        return c;
+    /**
+     * Consigue una conexión a la base de datos.
+     * @return Conexión a la base de datos.
+     * @throws ClassNotFoundException Clase no encontrada.
+     * @throws SQLException Error al conectarse.
+     */
+    public static void newConnection() throws ClassNotFoundException, SQLException {
+        Class.forName("org.sqlite.JDBC");
+        connection = DriverManager.getConnection(JDBC_CONNECTION + SQLITE_DIRECTORY);
     }
 
-    @Override
-    public void disconnect(Connection c) throws SQLException {
+    /**
+     * Desconecta de la bbdd habiéndole dado la conexión.
+     * @param c Conexión la cual se debe desconectar.
+     * @throws SQLException Error al desconectar.
+     */
+    public static void disconnect(Connection c) throws SQLException {
         c.close();
     }
-
-    
-    
 }

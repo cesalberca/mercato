@@ -6,6 +6,7 @@
 package es.cesalberca.mercato.view;
 
 import es.cesalberca.mercato.controller.database.DatabaseConnector;
+import es.cesalberca.mercato.controller.database.DatabaseHandler;
 import es.cesalberca.mercato.model.Category;
 import es.cesalberca.mercato.model.Item;
 import es.cesalberca.mercato.model.Order;
@@ -32,6 +33,16 @@ public class JFApp extends javax.swing.JFrame {
         this.setBounds(100, 100, 500, 600);
         this.getContentPane().add(jpa);
         this.setVisible(true);
+        try {
+            DatabaseConnector.newConnection();
+            JOptionPane.showMessageDialog(null, "BBDD disponible");
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, "BBDD no disponible");
+            Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "BBDD no disponible");
+            Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -80,9 +91,9 @@ public class JFApp extends javax.swing.JFrame {
         Order order = new Order(items, user);
         try {
 //            user.save(user);
-            DatabaseConnector sqlite = new DatabaseConnector();
-            Connection c = sqlite.getNewConnection();
-            sqlite.insertInto(c, user);
+            DatabaseHandler dbh = new DatabaseHandler();
+            
+            dbh.insertInto(DatabaseConnector.getConnection(), user);
             JOptionPane.showMessageDialog(null, "Usuario guardado con éxito");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);

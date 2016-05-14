@@ -37,11 +37,11 @@ public class Category {
      * @return ArrayList con todas las categorías
      */
     public ArrayList<Category> retrieveCategoriesFromDB() throws ClassNotFoundException, SQLException {
-        Connection c = null;
-        Statement stmt = null;
-        DatabaseConnector dbc = new DatabaseConnector();
-        c = dbc.getConnection();
-        ResultSet rs = dbc.selectAll(c, this);
+//        Connection c = null;
+//        Statement stmt = null;
+//        DatabaseConnector dbc = new DatabaseConnector();
+//        c = dbc.getConnection();
+//        ResultSet rs = dbc.selectAll(c, this);
         return null;
     }
 }

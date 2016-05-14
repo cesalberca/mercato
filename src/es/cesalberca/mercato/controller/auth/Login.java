@@ -15,18 +15,14 @@ public class Login {
     public static int tries = 3;
     
     public static Boolean isValidUser(User userTryingToLogin) throws SQLException, ClassNotFoundException {
-        Connection c = null;
         ResultSet rs = null;
         User user = null;
-        DatabaseConnector dbc = new DatabaseConnector();
-        c = dbc.getNewConnection();
-        DatabaseHandler.search(c, userTryingToLogin);
+        DatabaseHandler dbh = new DatabaseHandler();
+        rs = dbh.search(DatabaseConnector.getConnection(), userTryingToLogin);
         
         while (rs.next()) {
             user = new User(rs.getString("NAME"), rs.getString("PASSWORD"));
         }
-        
-        dbc.disconnect(c);
         
         if (user != null && userTryingToLogin.getPassword().equals(user.getPassword())) {
             return true;

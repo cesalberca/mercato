@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * Clase abstracta que gestiona la parte común de las bbdd.
  * @author César Alberca
  */
-public abstract class DatabaseHandler {
+public class DatabaseHandler {
     /**
      * Función que se encarga de hacer un cast al objeto apropiado en caso que se reciba un objeto genérico.
      * @param c Conexión a la base de datos.
@@ -95,10 +95,10 @@ public abstract class DatabaseHandler {
      * @return
      * @throws SQLException 
      */
-    public static ResultSet search(Connection c, Object obj) throws SQLException {
+    public ResultSet search(Connection c, Object obj) throws SQLException {
         ResultSet rs = null;
         if (obj instanceof User) {
-            rs = DatabaseHandler.search(c, (User) obj);
+            rs = search(c, (User) obj);
         } 
         return rs;
    }
@@ -110,27 +110,12 @@ public abstract class DatabaseHandler {
      * @return
      * @throws SQLException 
      */
-    public static ResultSet search(Connection c, User searchedUser) throws SQLException {
+    public ResultSet search(Connection c, User searchedUser) throws SQLException {
         PreparedStatement ps = null;
         String selectSQL = "SELECT * FROM USER WHERE NAME LIKE ?";
         ps = c.prepareStatement(selectSQL);
         ps.setString(1, "%" + searchedUser.getName() + "%");
-        ResultSet rs = ps.executeQuery( );
+        ResultSet rs = ps.executeQuery();
         return rs;
     }
-        
-    /**
-     * Consigue una conexión a la base de datos.
-     * @return Conexión a la base de datos.
-     * @throws ClassNotFoundException Clase no encontrada.
-     * @throws SQLException Error al conectarse.
-     */
-    public abstract Connection getNewConnection() throws ClassNotFoundException, SQLException;
-    
-    /**
-     * Desconecta de la bbdd habiéndole dado la conexión.
-     * @param c Conexión la cual se debe desconectar.
-     * @throws SQLException Error al desconectar.
-     */
-    public abstract void disconnect(Connection c) throws SQLException;
 }
