@@ -8,7 +8,8 @@
             <file>file:/C:/Users/Cesar/Workspace/Mercato/src/es/cesalberca/mercato/model/Category.java</file>
             <file>file:/C:/Users/Cesar/Workspace/Mercato/src/es/cesalberca/mercato/controller/database/DatabaseHandler.java</file>
             <file>file:/C:/Users/Cesar/Workspace/Mercato/src/es/cesalberca/mercato/view/JPLogin.java</file>
-            <file>file:/C:/Users/Cesar/Workspace/Mercato/src/es/cesalberca/mercato/controller/database/DatabaseConnector.java</file>
+            <file>file:/C:/Users/Cesar/Workspace/Mercato/src/es/cesalberca/mercato/view/JPSignup.java</file>
+            <file>file:/C:/Users/Cesar/Workspace/Mercato/src/es/cesalberca/mercato/controller/auth/Signup.java</file>
         </group>
     </open-files>
 </project-private>
