@@ -21,7 +21,7 @@ public class Signup {
      */
     public static boolean isUserAvailable(User u) throws SQLException, ClassNotFoundException {
         ResultSet rs = null;
-        rs = dbh.selectAll(DatabaseConnector.getConnection(), u);
+        rs = dbh.selectAll(DatabaseConnector.getConnection(),"User");
         User existingUser = null;
         
         while (rs.next()) {

@@ -81,8 +81,8 @@ public class DatabaseHandler {
      * @return
      * @throws SQLException 
      */
-    public ResultSet selectAll(Connection c, Object obj) throws SQLException {
-        String selectSQL = "SELECT * FROM " + obj.getClass().getSimpleName() + ";";
+    public ResultSet selectAll(Connection c, String table) throws SQLException {
+        String selectSQL = "SELECT * FROM " + table + ";";
         PreparedStatement preparedStatement = c.prepareStatement(selectSQL);
         ResultSet rs = preparedStatement.executeQuery();
         return rs;

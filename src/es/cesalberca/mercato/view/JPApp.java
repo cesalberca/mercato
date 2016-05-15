@@ -1,8 +1,16 @@
 package es.cesalberca.mercato.view;
 
+import es.cesalberca.mercato.controller.database.DatabaseConnector;
 import java.util.ArrayList;
 import java.util.Vector;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.table.DefaultTableModel;
+import static es.cesalberca.mercato.view.JFApp.dbh;
+import es.cesalberca.mercato.model.Category;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Panel principal de la aplicación.
@@ -56,9 +64,9 @@ public class JPApp extends javax.swing.JPanel {
         jbAddOrder.setText("Añadir a la cesta");
 
         jcbCategories.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-------" }));
-        jcbCategories.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jcbCategoriesActionPerformed(evt);
+        jcbCategories.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jcbCategoriesFocusGained(evt);
             }
         });
 
@@ -159,9 +167,23 @@ public class JPApp extends javax.swing.JPanel {
         JPSignup.signup();
     }//GEN-LAST:event_jbSignupActionPerformed
 
-    private void jcbCategoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbCategoriesActionPerformed
-        
-    }//GEN-LAST:event_jcbCategoriesActionPerformed
+    private void jcbCategoriesFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jcbCategoriesFocusGained
+        try {
+            
+            ResultSet rs = dbh.selectAll(DatabaseConnector.getConnection(), "Category");
+            Category c = null;
+            
+            while (rs.next()) {
+                c = new Category(rs.getString("NAME"));
+                jcbCategories.addItem(c.getName());
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(JPApp.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(JPApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jcbCategoriesFocusGained
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
