@@ -1,7 +1,5 @@
 package es.cesalberca.mercato.model;
 
-import java.util.ArrayList;
-
 /**
  * Clase de Categoría a la que puede pertenecer un ítem.
  * @author César Alberca

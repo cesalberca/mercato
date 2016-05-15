@@ -7,6 +7,8 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.table.DefaultTableModel;
 import static es.cesalberca.mercato.view.JFApp.dbh;
 import es.cesalberca.mercato.model.Category;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -20,6 +22,14 @@ public class JPApp extends javax.swing.JPanel {
     public JPApp() {
         initComponents();
         jbAddOrder.setEnabled(false);
+        
+        jcbCategories.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                System.out.println("hola");
+            }
+        });
+        
     }
 
     /**
@@ -159,17 +169,8 @@ public class JPApp extends javax.swing.JPanel {
         jtOrders.setModel(dtm);
     }
     
-    private void jbLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbLoginActionPerformed
-        JPLogin.login();
-    }//GEN-LAST:event_jbLoginActionPerformed
-
-    private void jbSignupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSignupActionPerformed
-        JPSignup.signup();
-    }//GEN-LAST:event_jbSignupActionPerformed
-
-    private void jcbCategoriesFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jcbCategoriesFocusGained
+    private void loadCategories() {
         try {
-            
             ResultSet rs = dbh.selectAll(DatabaseConnector.getConnection(), "Category");
             Category c = null;
             
@@ -183,6 +184,19 @@ public class JPApp extends javax.swing.JPanel {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(JPApp.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private void jbLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbLoginActionPerformed
+        JPLogin.login();
+    }//GEN-LAST:event_jbLoginActionPerformed
+
+    private void jbSignupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSignupActionPerformed
+        JPSignup.signup();
+    }//GEN-LAST:event_jbSignupActionPerformed
+
+    private void jcbCategoriesFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jcbCategoriesFocusGained
+        // TODO add your handling code here:
+        loadCategories();
     }//GEN-LAST:event_jcbCategoriesFocusGained
 
 
