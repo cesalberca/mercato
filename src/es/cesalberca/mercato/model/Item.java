@@ -1,7 +1,5 @@
 package es.cesalberca.mercato.model;
 
-import java.sql.SQLException;
-
 /**
  * Clase que representa un producto que puede ser añadido a la cesta de la compra.
  * @author César Alberca

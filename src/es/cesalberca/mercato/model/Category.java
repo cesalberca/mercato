@@ -1,10 +1,5 @@
 package es.cesalberca.mercato.model;
 
-import es.cesalberca.mercato.controller.database.DatabaseConnector;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
@@ -36,12 +31,5 @@ public class Category {
      * Se conecta a la base de datos, que se encarga de hacer un select y devuelve todas las categorías disponibles.
      * @return ArrayList con todas las categorías
      */
-    public ArrayList<Category> retrieveCategoriesFromDB() throws ClassNotFoundException, SQLException {
-//        Connection c = null;
-//        Statement stmt = null;
-//        DatabaseConnector dbc = new DatabaseConnector();
-//        c = dbc.getConnection();
-//        ResultSet rs = dbc.selectAll(c, this);
-        return null;
-    }
+
 }

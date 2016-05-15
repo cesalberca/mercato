@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package es.cesalberca.mercato.view;
 
 import es.cesalberca.mercato.controller.auth.Signup;
@@ -17,21 +12,18 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 /**
- *
- * @author Cesar
+ * Clase que genera un modal para registrarse.
+ * @author César Alberca
  */
 public class JPSignup extends javax.swing.JPanel {
 
-    Signup sg = null;
-
-    /**
-     * Creates new form JPSignup
-     */
     public JPSignup() {
         initComponents();
-        sg = new Signup();
     }
 
+    /**
+     * Genera un modal para registrar al usuario.
+     */
     public static void signup() {
         JTextField username = new JTextField(5);
         JTextField password = new JTextField(5);
@@ -46,24 +38,27 @@ public class JPSignup extends javax.swing.JPanel {
         myPanel.add(new JLabel("Confirmar contraseña:"));
         myPanel.add(confirmPassword);
 
-        int result = JOptionPane.showConfirmDialog(null, myPanel,
-                "Registrar usuario", JOptionPane.OK_CANCEL_OPTION);
-        if (result == JOptionPane.OK_OPTION && password.getText().equals(confirmPassword.getText())) {
-            User userTryingToSignup = new User(username.getText(), password.getText());
-            try {
-                if (Signup.isUserAvailable(userTryingToSignup)) {
-                    Signup.register(userTryingToSignup);
-                    JOptionPane.showMessageDialog(null, "Usuario registrado con éxito");
-                }
-            } catch (SQLException ex) {
-                Logger.getLogger(JPSignup.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(JPSignup.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Contraseñas no coinciden");
-        }
+        int result = JOptionPane.showConfirmDialog(null, myPanel, "Registrar usuario", JOptionPane.OK_CANCEL_OPTION);
 
+        if (result == JOptionPane.OK_OPTION) {
+            // Comprobamos que ambas contraseñas coinciden y que no están vacías.
+            if (password.getText().equals(confirmPassword.getText()) && !password.getText().isEmpty()) {
+                // Comprobamos en la bbdd que ese nombre de usuario no está cogido.
+                User userTryingToSignup = new User(username.getText(), password.getText());
+                try {
+                    if (Signup.isUserAvailable(userTryingToSignup)) {
+                        Signup.register(userTryingToSignup);
+                        JOptionPane.showMessageDialog(null, "Usuario registrado con éxito");
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(JPSignup.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(JPSignup.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Contraseñas no coinciden");
+            }
+        }
     }
 
     /**

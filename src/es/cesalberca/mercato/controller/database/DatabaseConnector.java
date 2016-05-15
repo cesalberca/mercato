@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
- *
+ * Clase que gestiona las conexiones a la base de datos.
  * @author César Alberca
  */
 public class DatabaseConnector {
@@ -14,9 +14,6 @@ public class DatabaseConnector {
     private static Connection connection = null;
     
     public static Connection getConnection() throws ClassNotFoundException, SQLException {
-//        if (connection == null) {
-//            newConnection();
-//        } 
         return connection;
     }
     

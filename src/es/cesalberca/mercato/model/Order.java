@@ -3,7 +3,7 @@ package es.cesalberca.mercato.model;
 import java.util.ArrayList;
 
 /**
- *
+ * Clase que representa un pedido que puede hacer un usuario. Este pedido tiene asignados items y un usuario.
  * @author César Alberca
  */
 public class Order {

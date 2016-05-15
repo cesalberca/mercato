@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
- * Clase abstracta que gestiona la parte común de las bbdd.
+ * Clase que gestiona la parte común de las bbdd.
  * @author César Alberca
  */
 public class DatabaseHandler {

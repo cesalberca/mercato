@@ -8,18 +8,17 @@ import java.util.logging.Logger;
 import javax.swing.*;
 
 /**
- *
+ * Modal para el inicio de sesión.
  * @author Cesar
  */
 public class JPLogin extends javax.swing.JPanel {
-
-    /**
-     * Creates new form JPLogin
-     */
     public JPLogin() {
         initComponents();
     }
     
+    /**
+     * Genera un modal con usuario y contraseña.
+     */
     public static void login(){
         JTextField jtfUser = new JTextField(5);
         JTextField jtfPassword = new JTextField(5);
@@ -27,12 +26,13 @@ public class JPLogin extends javax.swing.JPanel {
         JPanel myPanel = new JPanel();
         myPanel.add(new JLabel("Usuario:"));
         myPanel.add(jtfUser);
-        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
+        myPanel.add(Box.createHorizontalStrut(15));
         myPanel.add(new JLabel("Contraseña:"));
         myPanel.add(jtfPassword);
 
-        int result = JOptionPane.showConfirmDialog(null, myPanel, 
-                 "Inicio de sesión", JOptionPane.OK_CANCEL_OPTION);
+        // Captura el resultado del click del usuario.
+        int result = JOptionPane.showConfirmDialog(null, myPanel, "Inicio de sesión", JOptionPane.OK_CANCEL_OPTION);
+        
         if (result == JOptionPane.OK_OPTION) {
             User userTryingToLogin = new User(jtfUser.getText(), jtfPassword.getText());
             try {

@@ -1,7 +1,5 @@
 package es.cesalberca.mercato.model;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 
 /**

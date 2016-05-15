@@ -11,7 +11,6 @@ import es.cesalberca.mercato.model.Category;
 import es.cesalberca.mercato.model.Item;
 import es.cesalberca.mercato.model.Order;
 import es.cesalberca.mercato.model.User;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -19,21 +18,20 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
- *
+ * Clase principal del programa.
  * @author César Alberca
  */
 public class JFApp extends javax.swing.JFrame {
 
     JPApp jpa = new JPApp();
-    /**     
-     * Creates new form JFApp
-     */
+  
     public JFApp() {
         initComponents();
         this.setBounds(100, 100, 500, 600);
         this.getContentPane().add(jpa);
         this.setVisible(true);
         try {
+            // Al iniciar la aplicación se genera una nueva conexión.
             DatabaseConnector.newConnection();
         } catch (ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(null, "BBDD no disponible");
@@ -108,6 +106,7 @@ public class JFApp extends javax.swing.JFrame {
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         try {
+            // Desonecta de la bbdd en caso que se haya llegado a conectar.
             if (DatabaseConnector.getConnection() != null) {
                 DatabaseConnector.disconnect();
             }
