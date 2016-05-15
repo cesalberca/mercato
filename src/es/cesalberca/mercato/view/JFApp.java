@@ -24,6 +24,8 @@ import javax.swing.JOptionPane;
 public class JFApp extends javax.swing.JFrame {
 
     JPApp jpa = new JPApp();
+    // Solo habrá un DatabaseHandler para toda la app.
+    public static DatabaseHandler dbh = null;
   
     public JFApp() {
         initComponents();
@@ -32,6 +34,7 @@ public class JFApp extends javax.swing.JFrame {
         this.setVisible(true);
         try {
             // Al iniciar la aplicación se genera una nueva conexión.
+            dbh = new DatabaseHandler();
             DatabaseConnector.newConnection();
         } catch (ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(null, "BBDD no disponible");

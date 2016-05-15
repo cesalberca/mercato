@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+<Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
   <Properties>
     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
       <Color blue="ff" green="ff" red="ff" type="rgb"/>
@@ -42,7 +42,7 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jcbItems" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="jpAddOrder" min="-2" max="-2" attributes="0"/>
+                              <Component id="jbAddOrder" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -58,7 +58,7 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jlCategory" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jlItem" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jpAddOrder" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jbAddOrder" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jcbCategories" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jcbItems" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
@@ -101,7 +101,7 @@
         <Property name="text" type="java.lang.String" value="Producto"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="jpAddOrder">
+    <Component class="javax.swing.JButton" name="jbAddOrder">
       <Properties>
         <Property name="text" type="java.lang.String" value="A&#xf1;adir a la cesta"/>
       </Properties>
@@ -114,6 +114,9 @@
           </StringArray>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jcbCategoriesActionPerformed"/>
+      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
       </AuxValues>

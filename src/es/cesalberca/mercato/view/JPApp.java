@@ -5,16 +5,13 @@ import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 
 /**
- *
+ * Panel principal de la aplicación.
  * @author César Alberca
  */
 public class JPApp extends javax.swing.JPanel {
-
-    /**
-     * Creates new form JPOrder
-     */
     public JPApp() {
         initComponents();
+        jbAddOrder.setEnabled(false);
     }
 
     /**
@@ -30,7 +27,7 @@ public class JPApp extends javax.swing.JPanel {
         jbSignup = new javax.swing.JButton();
         jlCategory = new javax.swing.JLabel();
         jlItem = new javax.swing.JLabel();
-        jpAddOrder = new javax.swing.JButton();
+        jbAddOrder = new javax.swing.JButton();
         jcbCategories = new javax.swing.JComboBox<>();
         jcbItems = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -56,9 +53,14 @@ public class JPApp extends javax.swing.JPanel {
 
         jlItem.setText("Producto");
 
-        jpAddOrder.setText("Añadir a la cesta");
+        jbAddOrder.setText("Añadir a la cesta");
 
         jcbCategories.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-------" }));
+        jcbCategories.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcbCategoriesActionPerformed(evt);
+            }
+        });
 
         jcbItems.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-------" }));
 
@@ -107,7 +109,7 @@ public class JPApp extends javax.swing.JPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jcbItems, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jpAddOrder)))
+                                .addComponent(jbAddOrder)))
                         .addContainerGap())))
         );
         layout.setVerticalGroup(
@@ -117,7 +119,7 @@ public class JPApp extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jlCategory)
                     .addComponent(jlItem)
-                    .addComponent(jpAddOrder)
+                    .addComponent(jbAddOrder)
                     .addComponent(jcbCategories, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jcbItems, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -147,15 +149,7 @@ public class JPApp extends javax.swing.JPanel {
 
         DefaultTableModel dtm = new DefaultTableModel(vNombres,0);
         jtOrders.setModel(dtm);
-
-//        for (int i=0;i<alv.size();i++){
-//            dtm.setRowCount(dtm.getRowCount()+1);
-//            jtOrders.setValueAt(alv.get(i).getNombre(), i, 0);
-//            jtOrders.setValueAt(alv.get(i).getCategoria(), i, 1);
-//        }
-        
     }
-    
     
     private void jbLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbLoginActionPerformed
         JPLogin.login();
@@ -165,16 +159,20 @@ public class JPApp extends javax.swing.JPanel {
         JPSignup.signup();
     }//GEN-LAST:event_jbSignupActionPerformed
 
+    private void jcbCategoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbCategoriesActionPerformed
+        
+    }//GEN-LAST:event_jcbCategoriesActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton jbAddOrder;
     private javax.swing.JButton jbLogin;
     private javax.swing.JButton jbSignup;
     private javax.swing.JComboBox<String> jcbCategories;
     private javax.swing.JComboBox<String> jcbItems;
     private javax.swing.JLabel jlCategory;
     private javax.swing.JLabel jlItem;
-    private javax.swing.JButton jpAddOrder;
     private javax.swing.JTable jtOrders;
     // End of variables declaration//GEN-END:variables
 }

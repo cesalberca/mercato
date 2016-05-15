@@ -49,6 +49,8 @@ public class JPSignup extends javax.swing.JPanel {
                     if (Signup.isUserAvailable(userTryingToSignup)) {
                         Signup.register(userTryingToSignup);
                         JOptionPane.showMessageDialog(null, "Usuario registrado con éxito");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Ya existe un usuario con ese nombre.");
                     }
                 } catch (SQLException ex) {
                     Logger.getLogger(JPSignup.class.getName()).log(Level.SEVERE, null, ex);
