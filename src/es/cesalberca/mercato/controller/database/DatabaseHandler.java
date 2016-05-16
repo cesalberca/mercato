@@ -99,7 +99,9 @@ public class DatabaseHandler {
         ResultSet rs = null;
         if (obj instanceof User) {
             rs = search(c, (User) obj);
-        } 
+        } else if (obj instanceof Item) {
+            rs = search(c, (Item) obj);
+        }
         return rs;
    }
     
@@ -117,5 +119,31 @@ public class DatabaseHandler {
         ps.setString(1, "%" + searchedUser.getName() + "%");
         ResultSet rs = ps.executeQuery();
         return rs;
+    }
+    
+    /**
+     * Busca un determinado producto basado en su nombre y devuelve sus datos.
+     * @param c Conexión a la base de datos.
+     * @param searchedItem Item a buscar.
+     * @return
+     * @throws SQLException 
+     */
+    public ResultSet search(Connection c, Item searchedItem) throws SQLException {
+        PreparedStatement ps = null;
+        String selectSQL = "SELECT * FROM ITEM WHERE NAME LIKE ?";
+        ps = c.prepareStatement(selectSQL);
+        ps.setString(1, "%" + searchedItem.getName() + "%");
+        ResultSet rs = ps.executeQuery();
+        return rs;
+    }
+    
+    public ArrayList<Object> resultSetToArrayList(ResultSet rs) {
+        ArrayList<Object> searchedResult = null;
+        while(rs.next()) {
+            objectResult = new ?(rs.?);
+            searchedResult.add(objectResult);
+        }
+        
+        return searchedResult;
     }
 }

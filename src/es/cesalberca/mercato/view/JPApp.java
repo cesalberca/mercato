@@ -7,6 +7,9 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.table.DefaultTableModel;
 import static es.cesalberca.mercato.view.JFApp.dbh;
 import es.cesalberca.mercato.model.Category;
+import es.cesalberca.mercato.model.Item;
+import es.cesalberca.mercato.model.Order;
+import es.cesalberca.mercato.model.User;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.ResultSet;
@@ -19,9 +22,12 @@ import java.util.logging.Logger;
  * @author César Alberca
  */
 public class JPApp extends javax.swing.JPanel {
+    private static ArrayList<Item> items = null;
+    private static User u;
     public JPApp() {
         initComponents();
         jbAddOrder.setEnabled(false);
+        items = new ArrayList<Item>();
         
         jcbCategories.addItemListener(new ItemListener() {
             @Override
@@ -150,23 +156,37 @@ public class JPApp extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void loadOrders() {
-//        ArrayList<Videojuego> alv = new ArrayList();
-//        Videojuego alien = new Videojuego(1, "Alien","Videoaventura");
-//        Videojuego uncharted = new Videojuego(2, "Uncharted","Acción-Aventura");
-//        Videojuego destiny = new Videojuego(3, "Destiny","Sandbox");
-//        Videojuego lastofus = new Videojuego(4,"Last of Us", "Survival horror");
-//        alv.add(alien);
-//        alv.add(uncharted);
-//        alv.add(destiny);
-//        alv.add(lastofus);
-
-        Vector vNombres = new Vector();
-        vNombres.add("Título");
-        vNombres.add("Categoría");
-
-        DefaultTableModel dtm = new DefaultTableModel(vNombres,0);
-        jtOrders.setModel(dtm);
+    private void loadItems() {
+        try {
+            Item itemToSearch = new Item(jcbItems.getSelectedItem().toString(), 0, new Category(""));
+            
+            ResultSet rs = dbh.search(DatabaseConnector.getConnection(), itemToSearch);
+            
+            while (rs.next()) {
+                
+            }
+            
+            items.add(itemToSearch);
+            
+            Vector headersTable = new Vector();
+            headersTable.add("Categoría");
+            headersTable.add("Producto");
+            headersTable.add("Precio");
+            
+            DefaultTableModel dtm = new DefaultTableModel(headersTable, 0);
+            jtOrders.setModel(dtm);
+            
+            for (int i=0;i<items.size();i++){
+                dtm.setRowCount(dtm.getRowCount()+1);
+                jtOrders.setValueAt(items.get(i).getCategory(), i, 0);
+                jtOrders.setValueAt(items.get(i).getName(), i, 1);
+                jtOrders.setValueAt(items.get(i).getPrize(), i, 1);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(JPApp.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(JPApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private void loadCategories() {
@@ -195,7 +215,6 @@ public class JPApp extends javax.swing.JPanel {
     }//GEN-LAST:event_jbSignupActionPerformed
 
     private void jcbCategoriesFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jcbCategoriesFocusGained
-        // TODO add your handling code here:
         loadCategories();
     }//GEN-LAST:event_jcbCategoriesFocusGained
 
