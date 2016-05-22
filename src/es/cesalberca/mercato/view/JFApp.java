@@ -87,24 +87,6 @@ public class JFApp extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jmiSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiSaveActionPerformed
-        ArrayList<Order> orders = new ArrayList<Order>();
-        ArrayList<Item> items = new ArrayList<Item>();
-        Category category = new Category("Electronica");
-        Item item = new Item("Movil", 12.34f, category);
-        items.add(item);
-        User user = new User("César", "23234");
-        Order order = new Order(items, user);
-        try {
-//            user.save(user);
-            DatabaseHandler dbh = new DatabaseHandler();
-            
-            dbh.insertInto(DatabaseConnector.getConnection(), user);
-            JOptionPane.showMessageDialog(null, "Usuario guardado con éxito");
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }//GEN-LAST:event_jmiSaveActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing

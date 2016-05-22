@@ -7,12 +7,16 @@ package es.cesalberca.mercato.model;
 public class Item {
     private String name;
     private float prize;
-    private Category category;
+    private int idCategory;
+    
+    public Item(String name) {
+        this.name = name;
+    }
 
-    public Item(String name, float prize, Category category) {
+    public Item(String name, float prize, int idCategory) {
         this.name = name;
         this.prize = prize;
-        this.category = category;
+        this.idCategory = idCategory;
     }
 
     public String getName() {
@@ -23,7 +27,7 @@ public class Item {
         return prize;
     }
 
-    public Category getCategory() {
-        return category;
+    public int getCategory() {
+        return idCategory;
     }
 }

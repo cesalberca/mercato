@@ -71,7 +71,7 @@ public class DatabaseHandler {
         ps.setString(1, item.getName());
         // Los precios admiten decimales, pero sqlite no. Con lo que guardamos los precios multiplicados por 100 para quitar los decimales. Luego hacemos un cast a int.
         ps.setInt(2, (int)(item.getPrize() * 100));
-        ps.setString(3, item.getCategory().getName());
+        ps.setInt(3, item.getCategory());
         ps.executeUpdate();
     }
     
@@ -90,36 +90,25 @@ public class DatabaseHandler {
     }
     
     /**
-     * Función que se encarga de hacer un cast al objeto apropiado en caso que se reciba un objeto genérico.
-     * @param c
-     * @param obj
-     * @return
-     * @throws SQLException 
-     */
-    public ResultSet search(Connection c, Object obj) throws SQLException {
-        ResultSet rs = null;
-        if (obj instanceof User) {
-            rs = search(c, (User) obj);
-        } else if (obj instanceof Item) {
-            rs = search(c, (Item) obj);
-        }
-        return rs;
-   }
-    
-    /**
      * Busca un determinado usuario basado en su nombre y devuelve sus datos.
      * @param c Conexión a la base de datos.
      * @param searchedUser Usuario a buscar.
      * @return
      * @throws SQLException 
      */
-    public ResultSet search(Connection c, User searchedUser) throws SQLException {
+    public Object search(Connection c, User searchedUser) throws SQLException {
         PreparedStatement ps = null;
+        User u = null;
         String selectSQL = "SELECT * FROM USER WHERE NAME LIKE ?";
         ps = c.prepareStatement(selectSQL);
         ps.setString(1, "%" + searchedUser.getName() + "%");
         ResultSet rs = ps.executeQuery();
-        return rs;
+        
+        while(rs.next()) {
+            u = new User(rs.getString("NAME"));
+        }
+        
+        return u;
     }
     
     /**
@@ -129,21 +118,50 @@ public class DatabaseHandler {
      * @return
      * @throws SQLException 
      */
-    public ResultSet search(Connection c, Item searchedItem) throws SQLException {
+    public Object search(Connection c, Item searchedItem) throws SQLException {
         PreparedStatement ps = null;
+        Item i = null;
         String selectSQL = "SELECT * FROM ITEM WHERE NAME LIKE ?";
         ps = c.prepareStatement(selectSQL);
         ps.setString(1, "%" + searchedItem.getName() + "%");
         ResultSet rs = ps.executeQuery();
-        return rs;
+        Category category = null;
+        
+        while(rs.next()) {
+            i = new Item(rs.getString("NAME"), rs.getFloat("PRIZE") / 100, rs.getInt("ID_CATEGORY"));
+        }
+        
+        return i;
     }
     
-    public ResultSet searchItemsByCategory(Connection c, String category) throws SQLException {
+    public ArrayList<Item> searchItemsByCategory(Connection c, String category) throws SQLException {
         PreparedStatement ps = null;
+        ArrayList<Item> items = new ArrayList<>();
+        Item i = null;
         String selectSQL = "SELECT * FROM ITEM WHERE ID_CATEGORY = (SELECT ID FROM CATEGORY WHERE NAME LIKE ?)";
         ps = c.prepareStatement(selectSQL);
         ps.setString(1, "%" + category + "%");
         ResultSet rs = ps.executeQuery();
-        return rs;
+        
+        while(rs.next()) {
+            items.add(new Item(rs.getString("NAME")));
+        }
+        
+        return items;
+    }
+    
+    public Category getCategoryById(Connection c, int categoryId) throws SQLException {
+        PreparedStatement ps = null;
+        String selectSQL = "SELECT * FROM CATEGORY WHERE ID = ?";
+        ps = c.prepareStatement(selectSQL);
+        ps.setInt(1, categoryId);
+        ResultSet rs = ps.executeQuery();
+        Category category = null;
+        
+        while(rs.next()) {
+            category = new Category(rs.getString("NAME"), rs.getInt("ID"));
+        }
+        
+        return category;
     }
 }

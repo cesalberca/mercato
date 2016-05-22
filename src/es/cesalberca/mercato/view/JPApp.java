@@ -167,29 +167,24 @@ public class JPApp extends javax.swing.JPanel {
 
     private void addItemToOrder() {
         try {
-            Item itemToSearch = new Item(jcbItems.getSelectedItem().toString(), 0, new Category(""));
+            Item itemToSearch = new Item(jcbItems.getSelectedItem().toString());
+            Item item = (Item) dbh.search(DatabaseConnector.getConnection(), itemToSearch);
             
-            ResultSet rs = dbh.search(DatabaseConnector.getConnection(), itemToSearch);
-            
-            while (rs.next()) {
-                
-            }
-            
-            items.add(itemToSearch);
+            items.add(item);
             
             Vector headersTable = new Vector();
-            headersTable.add("Categoría");
-            headersTable.add("Producto");
+            headersTable.add("Nombre");
             headersTable.add("Precio");
+            headersTable.add("Categoría");
             
             DefaultTableModel dtm = new DefaultTableModel(headersTable, 0);
             jtOrders.setModel(dtm);
             
             for (int i=0;i<items.size();i++){
                 dtm.setRowCount(dtm.getRowCount()+1);
-                jtOrders.setValueAt(items.get(i).getCategory(), i, 0);
-                jtOrders.setValueAt(items.get(i).getName(), i, 1);
+                jtOrders.setValueAt(items.get(i).getName(), i, 0);
                 jtOrders.setValueAt(items.get(i).getPrize(), i, 1);
+                jtOrders.setValueAt(dbh.getCategoryById(DatabaseConnector.getConnection(), items.get(i).getCategory()).getName(), i, 2);
             }
         } catch (SQLException ex) {
             Logger.getLogger(JPApp.class.getName()).log(Level.SEVERE, null, ex);
@@ -200,12 +195,12 @@ public class JPApp extends javax.swing.JPanel {
     
     private void loadItems() {
         try {
-            ResultSet rs = dbh.searchItemsByCategory(DatabaseConnector.getConnection(), jcbCategories.getSelectedItem().toString());
+            ArrayList<Item> items = dbh.searchItemsByCategory(DatabaseConnector.getConnection(), jcbCategories.getSelectedItem().toString());
             System.out.println(jcbCategories.getSelectedItem().toString());
             // Comprueba que hay resultados
-            if (rs.isBeforeFirst()) {
-                while (rs.next()) {
-                    jcbItems.addItem(rs.getString("NAME"));
+            if (items.size() > 0) {
+                for (Item item : items) {
+                    jcbItems.addItem(item.getName());
                 }
             } else {
                 jcbItems.addItem("----");
@@ -224,7 +219,7 @@ public class JPApp extends javax.swing.JPanel {
             Category c = null;
             
             while (rs.next()) {
-                c = new Category(rs.getString("NAME"));
+                c = new Category(rs.getString("NAME"), rs.getInt("ID"));
                 jcbCategories.addItem(c.getName());
             }
             

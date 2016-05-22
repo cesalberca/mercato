@@ -29,12 +29,8 @@ public class Login {
      */
     public static Boolean isValidUser(User userTryingToLogin) throws SQLException, ClassNotFoundException {
         ResultSet rs = null;
-        User user = null;
-        rs = dbh.search(DatabaseConnector.getConnection(), userTryingToLogin);
+        User user = (User) dbh.search(DatabaseConnector.getConnection(), userTryingToLogin);
         
-        while (rs.next()) {
-            user = new User(rs.getString("NAME"), rs.getString("PASSWORD"));
-        }
         
         if (user != null && userTryingToLogin.getPassword().equals(user.getPassword())) {
             isUserLoggedIn = true;

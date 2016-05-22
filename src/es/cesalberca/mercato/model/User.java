@@ -10,6 +10,10 @@ public class User {
     private String name;
     private String password;
     private ArrayList<Order> orders;
+    
+    public User(String name) {
+        this.name = name;
+    }
 
     public User(String name, String pass) {
         this.name = name;
