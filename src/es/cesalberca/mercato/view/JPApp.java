@@ -23,11 +23,11 @@ import java.util.logging.Logger;
  */
 public class JPApp extends javax.swing.JPanel {
     private static ArrayList<Item> items = null;
+    public static Order order = null;
     private static User u;
     public JPApp() {
         initComponents();
-//        jbAddOrder.setEnabled(false);s
-        items = new ArrayList<Item>();
+        items = new ArrayList<>();
         
         // Añadimos un listener event para poder capturar el evento del cambio de estado del combo box.
         jcbCategories.addItemListener(new ItemListener() {
@@ -165,12 +165,19 @@ public class JPApp extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Añade un item al pedido.
+     */
     private void addItemToOrder() {
         try {
+            // Buscamos primero ese item en la bbdd.
             Item itemToSearch = new Item(jcbItems.getSelectedItem().toString());
             Item item = (Item) dbh.search(DatabaseConnector.getConnection(), itemToSearch);
             
             items.add(item);
+            // Generamos un objeto pedido
+            order = new Order(items, u);
+            
             
             Vector headersTable = new Vector();
             headersTable.add("Nombre");
@@ -193,6 +200,9 @@ public class JPApp extends javax.swing.JPanel {
         }
     }
     
+    /**
+     * Carga los items en el combo box.
+     */
     private void loadItems() {
         try {
             ArrayList<Item> items = dbh.searchItemsByCategory(DatabaseConnector.getConnection(), jcbCategories.getSelectedItem().toString());
@@ -213,6 +223,9 @@ public class JPApp extends javax.swing.JPanel {
         }
     }
     
+    /**
+     * Carga las categorías en el combo box.
+     */
     private void loadCategories() {
         try {
             ResultSet rs = dbh.selectAll(DatabaseConnector.getConnection(), "Category");

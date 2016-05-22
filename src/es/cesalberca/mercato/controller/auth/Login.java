@@ -28,9 +28,7 @@ public class Login {
      * @throws ClassNotFoundException Error de carga del jdbc.
      */
     public static Boolean isValidUser(User userTryingToLogin) throws SQLException, ClassNotFoundException {
-        ResultSet rs = null;
         User user = (User) dbh.search(DatabaseConnector.getConnection(), userTryingToLogin);
-        
         
         if (user != null && userTryingToLogin.getPassword().equals(user.getPassword())) {
             isUserLoggedIn = true;

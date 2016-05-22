@@ -16,30 +16,16 @@ import java.util.ArrayList;
  */
 public class DatabaseHandler {
     /**
-     * Función que se encarga de hacer un cast al objeto apropiado en caso que se reciba un objeto genérico.
-     * @param c Conexión a la base de datos.
-     * @param obj Objeto del que se hará el cast.
-     * @throws SQLException Error de sql.
-     */
-    public void insertInto(Connection c, Object obj) throws SQLException {
-        if (obj instanceof Order) {
-            this.insertInto(c, (Order) obj);
-        } else if(obj instanceof User) {
-            this.insertInto(c, (User) obj);
-        } 
-    }
-    
-    /**
      * Hace un insert en la base de datos dada la conexión y un ArrayList de pedidos.
      * @param c Conexión a la base de datos.
      * @param orders Pedidos que se tienen que registrar
      * @throws SQLException Error en el insert.
      */
-    public void insertInto(Connection c, ArrayList<Order> orders) throws SQLException {
+    public void insert(Connection c, Order order) throws SQLException {
         PreparedStatement ps = null;
-        String sqlInsert = "INSERT INTO ORDER VALUES (?, ?, ?, ?, ?)";
+        String sqlInsert = "INSERT INTO USER_ORDER VALUES (?, ?)";
         ps = c.prepareStatement(sqlInsert);
-        ps.setString(1, orders.get(0).getItems().get(0).getName());
+        ps.setString(1, order.getUser().getId());
         ps.executeUpdate();
     }
     
@@ -49,7 +35,7 @@ public class DatabaseHandler {
      * @param user Usuario que se insertará
      * @throws SQLException Error al hacer el insert.
      */
-    public void insertInto(Connection c, User user) throws SQLException {
+    public void insert(Connection c, User user) throws SQLException {
         PreparedStatement ps = null;
         String sqlInsert = "INSERT INTO USER (NAME, PASSWORD) VALUES (?, ?)";
         ps = c.prepareStatement(sqlInsert);
@@ -64,7 +50,7 @@ public class DatabaseHandler {
      * @param u Usuario que se insertará
      * @throws SQLException Error al hacer el insert.
      */
-    public void insertInto(Connection c, Item item) throws SQLException {
+    public void insert(Connection c, Item item) throws SQLException {
         PreparedStatement ps = null;
         String sqlInsert = "INSERT INTO ITEM (NAME, PRIZE, ID_CATEGORY) VALUES (?, ?, ?)";
         ps = c.prepareStatement(sqlInsert);
@@ -77,10 +63,10 @@ public class DatabaseHandler {
     
     /**
      * Hace un select de la tabla a la que pertenece ese objeto.
-     * @param c
-     * @param obj
-     * @return
-     * @throws SQLException 
+     * @param c Conexión a la base de datos.
+     * @param table Nombre de la table de la que se extraerán los datos.
+     * @return El result set con el resultado.
+     * @throws SQLException Error de sql.
      */
     public ResultSet selectAll(Connection c, String table) throws SQLException {
         String selectSQL = "SELECT * FROM " + table + ";";
@@ -105,7 +91,7 @@ public class DatabaseHandler {
         ResultSet rs = ps.executeQuery();
         
         while(rs.next()) {
-            u = new User(rs.getString("NAME"));
+            u = new User(rs.getString("NAME"), rs.getString("PASSWORD"));
         }
         
         return u;
@@ -123,9 +109,8 @@ public class DatabaseHandler {
         Item i = null;
         String selectSQL = "SELECT * FROM ITEM WHERE NAME LIKE ?";
         ps = c.prepareStatement(selectSQL);
-        ps.setString(1, "%" + searchedItem.getName() + "%");
+        ps.setString(1, searchedItem.getName());
         ResultSet rs = ps.executeQuery();
-        Category category = null;
         
         while(rs.next()) {
             i = new Item(rs.getString("NAME"), rs.getFloat("PRIZE") / 100, rs.getInt("ID_CATEGORY"));
@@ -134,13 +119,20 @@ public class DatabaseHandler {
         return i;
     }
     
+    /**
+     * Busca items basados en su categoría.
+     * @param c Conexión a la base de datos.
+     * @param category Categoría por la que filtrar.
+     * @return ArrayList con los items encontrados.
+     * @throws SQLException Error de sql.
+     */
     public ArrayList<Item> searchItemsByCategory(Connection c, String category) throws SQLException {
         PreparedStatement ps = null;
         ArrayList<Item> items = new ArrayList<>();
         Item i = null;
         String selectSQL = "SELECT * FROM ITEM WHERE ID_CATEGORY = (SELECT ID FROM CATEGORY WHERE NAME LIKE ?)";
         ps = c.prepareStatement(selectSQL);
-        ps.setString(1, "%" + category + "%");
+        ps.setString(1, category);
         ResultSet rs = ps.executeQuery();
         
         while(rs.next()) {
@@ -150,6 +142,13 @@ public class DatabaseHandler {
         return items;
     }
     
+    /**
+     * Busca una categoría por id.
+     * @param c Conexión a la base de datos.
+     * @param categoryId Id de la categoría a buscar.
+     * @return La categoría encontrada.
+     * @throws SQLException Error de sql.
+     */
     public Category getCategoryById(Connection c, int categoryId) throws SQLException {
         PreparedStatement ps = null;
         String selectSQL = "SELECT * FROM CATEGORY WHERE ID = ?";

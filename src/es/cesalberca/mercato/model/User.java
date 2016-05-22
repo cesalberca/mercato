@@ -7,6 +7,7 @@ import java.util.ArrayList;
  * @author César Alberca
  */
 public class User {
+    private int id;
     private String name;
     private String password;
     private ArrayList<Order> orders;
@@ -26,5 +27,9 @@ public class User {
 
     public String getPassword() {
         return password;
+    }
+    
+    public int getId() {
+        return id;
     }
 }

@@ -11,6 +11,7 @@ import es.cesalberca.mercato.model.Category;
 import es.cesalberca.mercato.model.Item;
 import es.cesalberca.mercato.model.Order;
 import es.cesalberca.mercato.model.User;
+import static es.cesalberca.mercato.view.JPApp.order;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -86,9 +87,6 @@ public class JFApp extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jmiSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiSaveActionPerformed
-    }//GEN-LAST:event_jmiSaveActionPerformed
-
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         try {
             // Desonecta de la bbdd en caso que se haya llegado a conectar.
@@ -101,6 +99,10 @@ public class JFApp extends javax.swing.JFrame {
             Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_formWindowClosing
+
+    private void jmiSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiSaveActionPerformed
+        dbh.insert(DatabaseConnector.getConnection(), order);
+    }//GEN-LAST:event_jmiSaveActionPerformed
 
     /**
      * @param args the command line arguments

@@ -44,6 +44,6 @@ public class Signup {
      */
     public static void register(User u) throws SQLException, ClassNotFoundException {
         DatabaseHandler dbh = new DatabaseHandler();
-        dbh.insertInto(DatabaseConnector.getConnection(), u);
+        dbh.insert(DatabaseConnector.getConnection(), u);
     }
 }
