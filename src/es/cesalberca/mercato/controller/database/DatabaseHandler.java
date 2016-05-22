@@ -1,5 +1,6 @@
 package es.cesalberca.mercato.controller.database;
 
+import es.cesalberca.mercato.model.Category;
 import es.cesalberca.mercato.model.Item;
 import es.cesalberca.mercato.model.Order;
 import es.cesalberca.mercato.model.User;
@@ -137,13 +138,12 @@ public class DatabaseHandler {
         return rs;
     }
     
-    public ArrayList<Object> resultSetToArrayList(ResultSet rs) {
-        ArrayList<Object> searchedResult = null;
-        while(rs.next()) {
-            objectResult = new ?(rs.?);
-            searchedResult.add(objectResult);
-        }
-        
-        return searchedResult;
+    public ResultSet searchItemsByCategory(Connection c, String category) throws SQLException {
+        PreparedStatement ps = null;
+        String selectSQL = "SELECT * FROM ITEM WHERE ID_CATEGORY = (SELECT ID FROM CATEGORY WHERE NAME LIKE ?)";
+        ps = c.prepareStatement(selectSQL);
+        ps.setString(1, "%" + category + "%");
+        ResultSet rs = ps.executeQuery();
+        return rs;
     }
 }

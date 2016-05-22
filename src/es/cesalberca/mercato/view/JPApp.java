@@ -26,16 +26,20 @@ public class JPApp extends javax.swing.JPanel {
     private static User u;
     public JPApp() {
         initComponents();
-        jbAddOrder.setEnabled(false);
+//        jbAddOrder.setEnabled(false);s
         items = new ArrayList<Item>();
         
+        // Añadimos un listener event para poder capturar el evento del cambio de estado del combo box.
         jcbCategories.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                System.out.println("hola");
+                // Esto nos evita un null pointer exception al cargar la app.
+                if (jcbCategories.getSelectedItem() != null) {
+                    jcbItems.removeAllItems();
+                    loadItems();
+                }
             }
         });
-        
     }
 
     /**
@@ -78,6 +82,11 @@ public class JPApp extends javax.swing.JPanel {
         jlItem.setText("Producto");
 
         jbAddOrder.setText("Añadir a la cesta");
+        jbAddOrder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbAddOrderActionPerformed(evt);
+            }
+        });
 
         jcbCategories.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-------" }));
         jcbCategories.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -156,7 +165,7 @@ public class JPApp extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void loadItems() {
+    private void addItemToOrder() {
         try {
             Item itemToSearch = new Item(jcbItems.getSelectedItem().toString(), 0, new Category(""));
             
@@ -182,6 +191,26 @@ public class JPApp extends javax.swing.JPanel {
                 jtOrders.setValueAt(items.get(i).getName(), i, 1);
                 jtOrders.setValueAt(items.get(i).getPrize(), i, 1);
             }
+        } catch (SQLException ex) {
+            Logger.getLogger(JPApp.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(JPApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void loadItems() {
+        try {
+            ResultSet rs = dbh.searchItemsByCategory(DatabaseConnector.getConnection(), jcbCategories.getSelectedItem().toString());
+            System.out.println(jcbCategories.getSelectedItem().toString());
+            // Comprueba que hay resultados
+            if (rs.isBeforeFirst()) {
+                while (rs.next()) {
+                    jcbItems.addItem(rs.getString("NAME"));
+                }
+            } else {
+                jcbItems.addItem("----");
+            }
+            
         } catch (SQLException ex) {
             Logger.getLogger(JPApp.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
@@ -215,9 +244,13 @@ public class JPApp extends javax.swing.JPanel {
     }//GEN-LAST:event_jbSignupActionPerformed
 
     private void jcbCategoriesFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jcbCategoriesFocusGained
+        jcbCategories.removeAllItems();
         loadCategories();
     }//GEN-LAST:event_jcbCategoriesFocusGained
 
+    private void jbAddOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAddOrderActionPerformed
+        addItemToOrder();
+    }//GEN-LAST:event_jbAddOrderActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;

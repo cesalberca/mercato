@@ -105,6 +105,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="A&#xf1;adir a la cesta"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbAddOrderActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JComboBox" name="jcbCategories">
       <Properties>
