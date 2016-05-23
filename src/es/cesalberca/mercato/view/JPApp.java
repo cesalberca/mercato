@@ -206,7 +206,6 @@ public class JPApp extends javax.swing.JPanel {
     private void loadItems() {
         try {
             ArrayList<Item> items = dbh.searchItemsByCategory(DatabaseConnector.getConnection(), jcbCategories.getSelectedItem().toString());
-            System.out.println(jcbCategories.getSelectedItem().toString());
             // Comprueba que hay resultados
             if (items.size() > 0) {
                 for (Item item : items) {

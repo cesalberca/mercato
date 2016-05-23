@@ -10,16 +10,25 @@ public class Item {
     private float prize;
     private int idCategory;
     
+    /**
+     * Este constructor
+     * @param name 
+     */
     public Item(String name) {
         this.name = name;
     }
 
-    public Item(String name, float prize, int idCategory) {
+    public Item(int id, String name, float prize, int idCategory) {
+        this.id = id;
         this.name = name;
         this.prize = prize;
         this.idCategory = idCategory;
     }
 
+    public int getId() {
+        return id;
+    }
+    
     public String getName() {
         return name;
     }

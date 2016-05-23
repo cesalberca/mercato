@@ -101,7 +101,7 @@ public class JFApp extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void jmiSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiSaveActionPerformed
-        dbh.insert(DatabaseConnector.getConnection(), order);
+//        dbh.insert(DatabaseConnector.getConnection(), order);
     }//GEN-LAST:event_jmiSaveActionPerformed
 
     /**

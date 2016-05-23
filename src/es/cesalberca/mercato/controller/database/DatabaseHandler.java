@@ -28,7 +28,7 @@ public class DatabaseHandler {
             sqlInsert = "INSERT INTO ORDER_ITEM VALUES (?, ?)";
             ps = c.prepareStatement(sqlInsert);
             ps.setString(1, "NULL");
-            ps.setString(1, item.getId());
+            ps.setInt(2, item.getId());
             ps.executeUpdate();
         }
     }
@@ -117,7 +117,7 @@ public class DatabaseHandler {
         ResultSet rs = ps.executeQuery();
         
         while(rs.next()) {
-            i = new Item(rs.getString("NAME"), rs.getFloat("PRIZE") / 100, rs.getInt("ID_CATEGORY"));
+            i = new Item(rs.getInt("ID"), rs.getString("NAME"), rs.getFloat("PRIZE") / 100, rs.getInt("ID_CATEGORY"));
         }
         
         return i;
