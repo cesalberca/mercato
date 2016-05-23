@@ -5,6 +5,7 @@ package es.cesalberca.mercato.model;
  * @author César Alberca
  */
 public class Item {
+    private int id;
     private String name;
     private float prize;
     private int idCategory;

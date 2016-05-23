@@ -23,10 +23,14 @@ public class DatabaseHandler {
      */
     public void insert(Connection c, Order order) throws SQLException {
         PreparedStatement ps = null;
-        String sqlInsert = "INSERT INTO USER_ORDER VALUES (?, ?)";
-        ps = c.prepareStatement(sqlInsert);
-        ps.setString(1, order.getUser().getId());
-        ps.executeUpdate();
+        String sqlInsert;
+        for (Item item : order.getItems()) {
+            sqlInsert = "INSERT INTO ORDER_ITEM VALUES (?, ?)";
+            ps = c.prepareStatement(sqlInsert);
+            ps.setString(1, "NULL");
+            ps.setString(1, item.getId());
+            ps.executeUpdate();
+        }
     }
     
     /**
