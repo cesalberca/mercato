@@ -16,6 +16,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JButton;
 
 /**
  * Panel principal de la aplicación.
@@ -23,11 +24,15 @@ import java.util.logging.Logger;
  */
 public class JPApp extends javax.swing.JPanel {
     private static ArrayList<Item> items = null;
-    public static Order order = null;
-    private static User u;
+    protected static Order order = null;
+    protected static User u;
+    protected static ArrayList<Item> selectedItems = null;
+    
     public JPApp() {
         initComponents();
         items = new ArrayList<>();
+        selectedItems = new ArrayList<>();
+        jbAddOrder.setEnabled(false);
         
         // Añadimos un listener event para poder capturar el evento del cambio de estado del combo box.
         jcbCategories.addItemListener(new ItemListener() {
@@ -124,10 +129,10 @@ public class JPApp extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jbLogin)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jbSignup)
                         .addGap(197, 197, 197))
                     .addGroup(layout.createSequentialGroup()
@@ -157,11 +162,11 @@ public class JPApp extends javax.swing.JPanel {
                     .addComponent(jcbItems, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jbSignup)
-                    .addComponent(jbLogin))
-                .addContainerGap())
+                    .addComponent(jbLogin)
+                    .addComponent(jbSignup))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -170,14 +175,15 @@ public class JPApp extends javax.swing.JPanel {
      */
     private void addItemToOrder() {
         try {
-            // Buscamos primero ese item en la bbdd.
-            Item itemToSearch = new Item(jcbItems.getSelectedItem().toString());
-            Item item = (Item) dbh.search(DatabaseConnector.getConnection(), itemToSearch);
+            Item selectedItem = null;
             
-            items.add(item);
-            // Generamos un objeto pedido
-            order = new Order(items, u);
+            for (Item item : items) {
+                if (item.getName().equals(jcbItems.getSelectedItem())) {
+                    selectedItem = item;
+                }
+            }
             
+            selectedItems.add(selectedItem);
             
             Vector headersTable = new Vector();
             headersTable.add("Nombre");
@@ -187,11 +193,11 @@ public class JPApp extends javax.swing.JPanel {
             DefaultTableModel dtm = new DefaultTableModel(headersTable, 0);
             jtOrders.setModel(dtm);
             
-            for (int i=0;i<items.size();i++){
+            for (int i=0;i<selectedItems.size();i++){
                 dtm.setRowCount(dtm.getRowCount()+1);
-                jtOrders.setValueAt(items.get(i).getName(), i, 0);
-                jtOrders.setValueAt(items.get(i).getPrize(), i, 1);
-                jtOrders.setValueAt(dbh.getCategoryById(DatabaseConnector.getConnection(), items.get(i).getCategory()).getName(), i, 2);
+                jtOrders.setValueAt(selectedItems.get(i).getName(), i, 0);
+                jtOrders.setValueAt(selectedItems.get(i).getPrize(), i, 1);
+                jtOrders.setValueAt(dbh.getCategoryById(DatabaseConnector.getConnection(), selectedItems.get(i).getCategory()).getName(), i, 2);
             }
         } catch (SQLException ex) {
             Logger.getLogger(JPApp.class.getName()).log(Level.SEVERE, null, ex);
@@ -201,11 +207,11 @@ public class JPApp extends javax.swing.JPanel {
     }
     
     /**
-     * Carga los items en el combo box.
+     * Carga los items en memoria y en el combobox.
      */
     private void loadItems() {
         try {
-            ArrayList<Item> items = dbh.searchItemsByCategory(DatabaseConnector.getConnection(), jcbCategories.getSelectedItem().toString());
+            items = dbh.searchItemsByCategory(DatabaseConnector.getConnection(), jcbCategories.getSelectedItem().toString());
             // Comprueba que hay resultados
             if (items.size() > 0) {
                 for (Item item : items) {
@@ -243,7 +249,7 @@ public class JPApp extends javax.swing.JPanel {
     }
     
     private void jbLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbLoginActionPerformed
-        JPLogin.login();
+        JPLogin.login(jbAddOrder);
     }//GEN-LAST:event_jbLoginActionPerformed
 
     private void jbSignupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSignupActionPerformed
@@ -261,7 +267,7 @@ public class JPApp extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JButton jbAddOrder;
+    protected javax.swing.JButton jbAddOrder;
     private javax.swing.JButton jbLogin;
     private javax.swing.JButton jbSignup;
     private javax.swing.JComboBox<String> jcbCategories;

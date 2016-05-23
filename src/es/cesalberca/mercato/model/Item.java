@@ -40,4 +40,9 @@ public class Item {
     public int getCategory() {
         return idCategory;
     }
+
+    @Override
+    public String toString() {
+        return "Item{" + "id=" + id + ", name=" + name + ", prize=" + prize + ", idCategory=" + idCategory + '}';
+    }
 }

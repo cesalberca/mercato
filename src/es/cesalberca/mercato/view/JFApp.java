@@ -7,13 +7,10 @@ package es.cesalberca.mercato.view;
 
 import es.cesalberca.mercato.controller.database.DatabaseConnector;
 import es.cesalberca.mercato.controller.database.DatabaseHandler;
-import es.cesalberca.mercato.model.Category;
-import es.cesalberca.mercato.model.Item;
 import es.cesalberca.mercato.model.Order;
-import es.cesalberca.mercato.model.User;
-import static es.cesalberca.mercato.view.JPApp.order;
+import static es.cesalberca.mercato.view.JPApp.selectedItems;
+import static es.cesalberca.mercato.view.JPLogin.user;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -101,7 +98,17 @@ public class JFApp extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void jmiSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiSaveActionPerformed
-//        dbh.insert(DatabaseConnector.getConnection(), order);
+        try {
+            Order order = new Order(selectedItems, user);
+            dbh.insert(DatabaseConnector.getConnection(), order);
+            JOptionPane.showMessageDialog(null, "Pedido guardado correctamente");
+            // Limpar jtable aquí
+        } catch (SQLException ex) {
+            Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Pedido no guardado correctamente. Inténtalo de nuevo más tarde");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jmiSaveActionPerformed
 
     /**

@@ -12,14 +12,17 @@ import javax.swing.*;
  * @author Cesar
  */
 public class JPLogin extends javax.swing.JPanel {
+    protected static User user = null;
+    
     public JPLogin() {
         initComponents();
     }
     
     /**
      * Genera un modal con usuario y contraseña.
+     * @param jbAddOrder Botón que se desactiva cuando se inicie sesión correctamente.
      */
-    public static void login(){
+    public static void login(JButton jbAddOrder){
         JTextField jtfUser = new JTextField(5);
         JTextField jtfPassword = new JTextField(5);
 
@@ -37,7 +40,9 @@ public class JPLogin extends javax.swing.JPanel {
             User userTryingToLogin = new User(jtfUser.getText(), jtfPassword.getText());
             try {
                 if (Login.isValidUser(userTryingToLogin)) {
+                    user = userTryingToLogin;
                     JOptionPane.showMessageDialog(null, "Bienvenido");
+                    jbAddOrder.setEnabled(true);
                 } else {
                     JOptionPane.showMessageDialog(null, "Error al iniciar sesión");
                 }

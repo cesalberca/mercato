@@ -140,7 +140,7 @@ public class DatabaseHandler {
         ResultSet rs = ps.executeQuery();
         
         while(rs.next()) {
-            items.add(new Item(rs.getString("NAME")));
+            items.add(new Item(rs.getInt("ID"), rs.getString("NAME"), rs.getFloat("PRIZE") / 100, rs.getInt("ID_CATEGORY")));
         }
         
         return items;
