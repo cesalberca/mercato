@@ -14,13 +14,13 @@ import java.sql.SQLException;
 public class Signup {
     /**
      * Comprueba si ese nombre de usuario está disponible.
-     * @param u Usuario del que se comprobará el nombre.
+     * @param user Usuario del que se comprobará el nombre.
      * @return Nombre de usuario disponible o no.
      * @throws SQLException Error de sql.
      * @throws ClassNotFoundException Error de carga del jdbc.
      */
-    public static boolean isUserAvailable(User u) throws SQLException, ClassNotFoundException {
-        User existingUser = (User) dbh.search(DatabaseConnector.getConnection(), u);
+    public static boolean isUserAvailable(User user) throws SQLException, ClassNotFoundException {
+        User existingUser = (User) dbh.search(DatabaseConnector.getConnection(), user);
         return existingUser == null;
     }
     
