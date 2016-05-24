@@ -7,6 +7,7 @@ package es.cesalberca.mercato.view;
 
 import es.cesalberca.mercato.controller.database.DatabaseConnector;
 import es.cesalberca.mercato.controller.database.DatabaseHandler;
+import es.cesalberca.mercato.controller.shop.Shop;
 import es.cesalberca.mercato.model.Item;
 import es.cesalberca.mercato.model.Order;
 import static es.cesalberca.mercato.view.JPApp.selectedItems;
@@ -25,6 +26,7 @@ public class JFApp extends javax.swing.JFrame {
     JPApp jpa = new JPApp();
     // Solo habrá un DatabaseHandler para toda la app.
     public static DatabaseHandler dbh = null;
+    public static Shop shop = null;
   
     public JFApp() {
         initComponents();

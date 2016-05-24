@@ -20,20 +20,8 @@ public class Signup {
      * @throws ClassNotFoundException Error de carga del jdbc.
      */
     public static boolean isUserAvailable(User u) throws SQLException, ClassNotFoundException {
-        ResultSet rs = null;
-        rs = dbh.selectAll(DatabaseConnector.getConnection(),"User");
-        User existingUser = null;
-        
-        while (rs.next()) {
-            existingUser = new User(rs.getString("NAME"), rs.getString("PASSWORD"));
-            if (existingUser.getName().equals(u.getName())) {
-                // Si encuentra al menos una coincidencia detiene el bucle.
-                return false;
-            }
-        }
-        
-        // Si ha llegado a este punto eso quiere decir que no hay ninguna coincidencia.
-        return true;
+        User existingUser = (User) dbh.search(DatabaseConnector.getConnection(), u);
+        return existingUser == null;
     }
     
     /**

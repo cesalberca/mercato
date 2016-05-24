@@ -2,6 +2,7 @@ package es.cesalberca.mercato.view;
 
 import es.cesalberca.mercato.controller.auth.Login;
 import es.cesalberca.mercato.controller.database.DatabaseConnector;
+import es.cesalberca.mercato.controller.shop.Shop;
 import es.cesalberca.mercato.model.User;
 import static es.cesalberca.mercato.view.JFApp.dbh;
 import java.sql.SQLException;
@@ -41,18 +42,20 @@ public class JPLogin extends javax.swing.JPanel {
         if (result == JOptionPane.OK_OPTION) {
             try {
                 User userTryingToLogin = new User(jtfUser.getText(), jtfPassword.getText());
+                
+                // Comprobamos que el usuario y la contraseña son válidas.
                 if (Login.isValidUser(userTryingToLogin)) {
-                    // Buscamos el id
+                    // Buscamos el id de ese usuario
                     int userId = ((User) dbh.search(DatabaseConnector.getConnection(), userTryingToLogin)).getId();;
                     user = new User(userId, userTryingToLogin.getName(), userTryingToLogin.getPassword());
                     JOptionPane.showMessageDialog(null, "Bienvenido");
                     jbAddOrder.setEnabled(true);
+                    // Cuando el usuario se loggea con éxito se instancia el gestor de la tienda.
+                    JFApp.shop = new Shop(user);
                 } else {
-                    JOptionPane.showMessageDialog(null, "Error al iniciar sesión");
+                    JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectas.");
                 }
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(JPLogin.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (SQLException ex) {
+            } catch (ClassNotFoundException | SQLException ex) {
                 Logger.getLogger(JPLogin.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

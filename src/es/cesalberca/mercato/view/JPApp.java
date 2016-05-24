@@ -3,7 +3,6 @@ package es.cesalberca.mercato.view;
 import es.cesalberca.mercato.controller.database.DatabaseConnector;
 import java.util.ArrayList;
 import java.util.Vector;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.table.DefaultTableModel;
 import static es.cesalberca.mercato.view.JFApp.dbh;
 import es.cesalberca.mercato.model.Category;
@@ -16,7 +15,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JButton;
 
 /**
  * Panel principal de la aplicación.
@@ -25,7 +23,7 @@ import javax.swing.JButton;
 public class JPApp extends javax.swing.JPanel {
     private static ArrayList<Item> items = null;
     protected static Order order = null;
-    protected static User u;
+//    protected static User u;
     protected static ArrayList<Item> selectedItems = null;
     
     public JPApp() {
