@@ -1,7 +1,9 @@
 package es.cesalberca.mercato.view;
 
 import es.cesalberca.mercato.controller.auth.Login;
+import es.cesalberca.mercato.controller.database.DatabaseConnector;
 import es.cesalberca.mercato.model.User;
+import static es.cesalberca.mercato.view.JFApp.dbh;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,10 +39,12 @@ public class JPLogin extends javax.swing.JPanel {
         int result = JOptionPane.showConfirmDialog(null, myPanel, "Inicio de sesión", JOptionPane.OK_CANCEL_OPTION);
         
         if (result == JOptionPane.OK_OPTION) {
-            User userTryingToLogin = new User(jtfUser.getText(), jtfPassword.getText());
             try {
+                User userTryingToLogin = new User(jtfUser.getText(), jtfPassword.getText());
                 if (Login.isValidUser(userTryingToLogin)) {
-                    user = userTryingToLogin;
+                    // Buscamos el id
+                    int userId = ((User) dbh.search(DatabaseConnector.getConnection(), userTryingToLogin)).getId();;
+                    user = new User(userId, userTryingToLogin.getName(), userTryingToLogin.getPassword());
                     JOptionPane.showMessageDialog(null, "Bienvenido");
                     jbAddOrder.setEnabled(true);
                 } else {
