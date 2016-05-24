@@ -7,3 +7,4 @@ nbactions.xml
 .nb-gradle/
 *.class
 *.class
+bbdd/mercatodb
