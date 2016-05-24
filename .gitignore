@@ -5,6 +5,3 @@ dist/
 nbdist/
 nbactions.xml
 .nb-gradle/
-*.class
-*.class
-bbdd/mercatodb

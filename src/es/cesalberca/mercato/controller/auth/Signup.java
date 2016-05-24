@@ -14,14 +14,26 @@ import java.sql.SQLException;
 public class Signup {
     /**
      * Comprueba si ese nombre de usuario está disponible.
-     * @param user Usuario del que se comprobará el nombre.
+     * @param u Usuario del que se comprobará el nombre.
      * @return Nombre de usuario disponible o no.
      * @throws SQLException Error de sql.
      * @throws ClassNotFoundException Error de carga del jdbc.
      */
-    public static boolean isUserAvailable(User user) throws SQLException, ClassNotFoundException {
-        User existingUser = (User) dbh.search(DatabaseConnector.getConnection(), user);
-        return existingUser == null;
+    public static boolean isUserAvailable(User u) throws SQLException, ClassNotFoundException {
+        ResultSet rs = null;
+        rs = dbh.selectAll(DatabaseConnector.getConnection(),"User");
+        User existingUser = null;
+        
+        while (rs.next()) {
+            existingUser = new User(rs.getString("NAME"), rs.getString("PASSWORD"));
+            if (existingUser.getName().equals(u.getName())) {
+                // Si encuentra al menos una coincidencia detiene el bucle.
+                return false;
+            }
+        }
+        
+        // Si ha llegado a este punto eso quiere decir que no hay ninguna coincidencia.
+        return true;
     }
     
     /**

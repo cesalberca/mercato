@@ -3,6 +3,7 @@ package es.cesalberca.mercato.view;
 import es.cesalberca.mercato.controller.database.DatabaseConnector;
 import java.util.ArrayList;
 import java.util.Vector;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.table.DefaultTableModel;
 import static es.cesalberca.mercato.view.JFApp.dbh;
 import es.cesalberca.mercato.model.Category;
@@ -15,6 +16,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JButton;
 
 /**
  * Panel principal de la aplicación.
@@ -23,7 +25,7 @@ import java.util.logging.Logger;
 public class JPApp extends javax.swing.JPanel {
     private static ArrayList<Item> items = null;
     protected static Order order = null;
-//    protected static User u;
+    protected static User u;
     protected static ArrayList<Item> selectedItems = null;
     
     public JPApp() {
@@ -168,35 +170,39 @@ public class JPApp extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    
-    /**
-     * 
-     */
-    private void repaintTable(ArrayList<Item> items) {
-        Vector headersTable = new Vector();
-        headersTable.add("Nombre");
-        headersTable.add("Precio");
-        headersTable.add("Categoría");
-
-        DefaultTableModel dtm = new DefaultTableModel(headersTable, 0);
-        jtOrders.setModel(dtm);
-
-        for (int i=0;i<items.size();i++){
-            dtm.setRowCount(dtm.getRowCount()+1);
-            jtOrders.setValueAt(items.get(i).getName(), i, 0);
-            jtOrders.setValueAt(items.get(i).getPrize(), i, 1);
-            jtOrders.setValueAt(items.get(i).getCategory(), i, 2);
-        }
-    }
     /**
      * Añade un item al pedido.
      */
     private void addItemToOrder() {
-
-        // Cogel item seleccionado del array de items que hay disponibles.
-        for (Item item : items) {
-            if (item.getName().equals(jcbItems.getSelectedItem())) {
+        try {
+            Item selectedItem = null;
+            
+            for (Item item : items) {
+                if (item.getName().equals(jcbItems.getSelectedItem())) {
+                    selectedItem = item;
+                }
             }
+            
+            selectedItems.add(selectedItem);
+            
+            Vector headersTable = new Vector();
+            headersTable.add("Nombre");
+            headersTable.add("Precio");
+            headersTable.add("Categoría");
+            
+            DefaultTableModel dtm = new DefaultTableModel(headersTable, 0);
+            jtOrders.setModel(dtm);
+            
+            for (int i=0;i<selectedItems.size();i++){
+                dtm.setRowCount(dtm.getRowCount()+1);
+                jtOrders.setValueAt(selectedItems.get(i).getName(), i, 0);
+                jtOrders.setValueAt(selectedItems.get(i).getPrize(), i, 1);
+                jtOrders.setValueAt(dbh.getCategoryById(DatabaseConnector.getConnection(), selectedItems.get(i).getCategory()).getName(), i, 2);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(JPApp.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(JPApp.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

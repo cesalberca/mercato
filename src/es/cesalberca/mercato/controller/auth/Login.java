@@ -4,6 +4,7 @@ import es.cesalberca.mercato.controller.database.DatabaseHandler;
 import es.cesalberca.mercato.controller.database.DatabaseConnector;
 import es.cesalberca.mercato.model.User;
 import static es.cesalberca.mercato.view.JFApp.dbh;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -11,6 +12,14 @@ import java.sql.SQLException;
  * @author César Alberca
  */
 public class Login {
+    // Intentos disponibles
+    public static int tries = 3;
+    public static boolean isUserLoggedIn = false;
+
+    public static boolean isIsUserLoggedIn() {
+        return isUserLoggedIn;
+    }
+    
     /**
      * Comprueba si el usuario que se intenta loggear es válido y que su contraseña es correcta.
      * @param userTryingToLogin Usuario que intenta iniciar sesión.
@@ -22,7 +31,11 @@ public class Login {
         User user = (User) dbh.search(DatabaseConnector.getConnection(), userTryingToLogin);
         
         if (user != null && userTryingToLogin.getPassword().equals(user.getPassword())) {
+            isUserLoggedIn = true;
             return true;
+        } else if (tries > 0) {
+            tries--;
+            return false;
         } else {
             return false;
         }
