@@ -2,8 +2,11 @@ package es.cesalberca.mercato.view;
 
 import es.cesalberca.mercato.controller.auth.Login;
 <<<<<<< HEAD
+<<<<<<< HEAD
 import es.cesalberca.mercato.controller.database.DatabaseConnector;
 import es.cesalberca.mercato.controller.shop.Shop;
+=======
+>>>>>>> parent of 468b623... Pedidos funcionando!
 =======
 >>>>>>> parent of 468b623... Pedidos funcionando!
 import es.cesalberca.mercato.model.User;
@@ -45,6 +48,7 @@ public class JPLogin extends javax.swing.JPanel {
             User userTryingToLogin = new User(jtfUser.getText(), jtfPassword.getText());
             try {
 <<<<<<< HEAD
+<<<<<<< HEAD
                 User userTryingToLogin = new User(jtfUser.getText(), jtfPassword.getText());
                 
                 // Comprobamos que el usuario y la contraseña son válidas.
@@ -52,6 +56,10 @@ public class JPLogin extends javax.swing.JPanel {
                     // Buscamos el id de ese usuario
                     int userId = ((User) dbh.search(DatabaseConnector.getConnection(), userTryingToLogin)).getId();;
                     user = new User(userId, userTryingToLogin.getName(), userTryingToLogin.getPassword());
+=======
+                if (Login.isValidUser(userTryingToLogin)) {
+                    user = userTryingToLogin;
+>>>>>>> parent of 468b623... Pedidos funcionando!
 =======
                 if (Login.isValidUser(userTryingToLogin)) {
                     user = userTryingToLogin;
