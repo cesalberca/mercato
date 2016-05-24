@@ -168,39 +168,36 @@ public class JPApp extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    /**
+     * 
+     */
+    private void repaintTable(ArrayList<Item> items) {
+        Vector headersTable = new Vector();
+        headersTable.add("Nombre");
+        headersTable.add("Precio");
+        headersTable.add("Categoría");
+
+        DefaultTableModel dtm = new DefaultTableModel(headersTable, 0);
+        jtOrders.setModel(dtm);
+
+        for (int i=0;i<items.size();i++){
+            dtm.setRowCount(dtm.getRowCount()+1);
+            jtOrders.setValueAt(items.get(i).getName(), i, 0);
+            jtOrders.setValueAt(items.get(i).getPrize(), i, 1);
+            jtOrders.setValueAt(items.get(i).getCategory(), i, 2);
+        }
+    }
     /**
      * Añade un item al pedido.
      */
     private void addItemToOrder() {
-        try {
-            Item selectedItem = null;
-            
-            for (Item item : items) {
-                if (item.getName().equals(jcbItems.getSelectedItem())) {
-                    selectedItem = item;
-                }
+
+        // Cogel item seleccionado del array de items que hay disponibles.
+        for (Item item : items) {
+            if (item.getName().equals(jcbItems.getSelectedItem())) {
+                JFApp.shop.addToOrder(item);
             }
-            
-            selectedItems.add(selectedItem);
-            
-            Vector headersTable = new Vector();
-            headersTable.add("Nombre");
-            headersTable.add("Precio");
-            headersTable.add("Categoría");
-            
-            DefaultTableModel dtm = new DefaultTableModel(headersTable, 0);
-            jtOrders.setModel(dtm);
-            
-            for (int i=0;i<selectedItems.size();i++){
-                dtm.setRowCount(dtm.getRowCount()+1);
-                jtOrders.setValueAt(selectedItems.get(i).getName(), i, 0);
-                jtOrders.setValueAt(selectedItems.get(i).getPrize(), i, 1);
-                jtOrders.setValueAt(dbh.getCategoryById(DatabaseConnector.getConnection(), selectedItems.get(i).getCategory()).getName(), i, 2);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(JPApp.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(JPApp.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

@@ -7,8 +7,11 @@ package es.cesalberca.mercato.view;
 
 import es.cesalberca.mercato.controller.database.DatabaseConnector;
 import es.cesalberca.mercato.controller.database.DatabaseHandler;
+<<<<<<< HEAD
 import es.cesalberca.mercato.controller.shop.Shop;
 import es.cesalberca.mercato.model.Item;
+=======
+>>>>>>> parent of 468b623... Pedidos funcionando!
 import es.cesalberca.mercato.model.Order;
 import static es.cesalberca.mercato.view.JPApp.selectedItems;
 import static es.cesalberca.mercato.view.JPLogin.user;
@@ -103,10 +106,6 @@ public class JFApp extends javax.swing.JFrame {
     private void jmiSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiSaveActionPerformed
         try {
             Order order = new Order(selectedItems, user);
-            System.out.println(order.getUser().toString());
-            for (Item item : order.getItems()) {
-                System.out.println(item);
-            }
             dbh.insert(DatabaseConnector.getConnection(), order);
             JOptionPane.showMessageDialog(null, "Pedido guardado correctamente");
             // Limpar jtable aquí

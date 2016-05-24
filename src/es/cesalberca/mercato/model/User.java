@@ -21,12 +21,6 @@ public class User {
         this.password = pass;
     }
 
-    public User(int id, String name, String password) {
-        this.id = id;
-        this.name = name;
-        this.password = password;
-    }
-    
     public String getName() {
         return name;
     }
@@ -37,10 +31,5 @@ public class User {
     
     public int getId() {
         return id;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" + "id=" + id + ", name=" + name + ", password=" + password + ", orders=" + orders + '}';
     }
 }

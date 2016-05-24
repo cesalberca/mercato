@@ -27,7 +27,7 @@ public class DatabaseHandler {
         for (Item item : order.getItems()) {
             sqlInsert = "INSERT INTO ORDER_ITEM VALUES (?, ?)";
             ps = c.prepareStatement(sqlInsert);
-            ps.setInt(1, order.getUser().getId());
+            ps.setString(1, "NULL");
             ps.setInt(2, item.getId());
             ps.executeUpdate();
         }
@@ -95,7 +95,7 @@ public class DatabaseHandler {
         ResultSet rs = ps.executeQuery();
         
         while(rs.next()) {
-            u = new User(rs.getInt("ID"), rs.getString("NAME"), rs.getString("PASSWORD"));
+            u = new User(rs.getString("NAME"), rs.getString("PASSWORD"));
         }
         
         return u;
@@ -166,27 +166,5 @@ public class DatabaseHandler {
         }
         
         return category;
-    }
-
-    /**
-     * Busca el último id disponible de una tabla
-     * @param c
-     * @param table
-     * @return
-     * @throws SQLException 
-     */
-    public int getLastId(Connection c, String table) throws SQLException {
-        int lastId = -1;
-        PreparedStatement ps = null;
-        String selectSQL = "SELECT MAX(ID) FROM ?;";
-        ps = c.prepareStatement(selectSQL);
-        ps.setString(1, table);
-        ResultSet rs = ps.executeQuery();
-        
-        if(rs.next()) {
-            lastId = rs.getInt(1);
-        }
-        
-        return lastId + 1;
     }
 }
