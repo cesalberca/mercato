@@ -91,6 +91,7 @@ public class JFApp extends javax.swing.JFrame {
             if (DatabaseConnector.getConnection() != null) {
                 DatabaseConnector.disconnect();
             }
+            DatabaseConnector.disconnect();
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
@@ -101,10 +102,6 @@ public class JFApp extends javax.swing.JFrame {
     private void jmiSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiSaveActionPerformed
         try {
             Order order = new Order(selectedItems, user);
-            System.out.println(order.getUser().toString());
-            for (Item item : order.getItems()) {
-                System.out.println(item);
-            }
             dbh.insert(DatabaseConnector.getConnection(), order);
             JOptionPane.showMessageDialog(null, "Pedido guardado correctamente");
             // Limpar jtable aquí
