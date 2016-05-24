@@ -1,15 +1,9 @@
 package es.cesalberca.mercato.view;
 
 import es.cesalberca.mercato.controller.auth.Login;
-<<<<<<< HEAD
-<<<<<<< HEAD
 import es.cesalberca.mercato.controller.database.DatabaseConnector;
-import es.cesalberca.mercato.controller.shop.Shop;
-=======
->>>>>>> parent of 468b623... Pedidos funcionando!
-=======
->>>>>>> parent of 468b623... Pedidos funcionando!
 import es.cesalberca.mercato.model.User;
+import static es.cesalberca.mercato.view.JFApp.dbh;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -47,27 +41,15 @@ public class JPLogin extends javax.swing.JPanel {
         if (result == JOptionPane.OK_OPTION) {
             User userTryingToLogin = new User(jtfUser.getText(), jtfPassword.getText());
             try {
-<<<<<<< HEAD
-<<<<<<< HEAD
-                User userTryingToLogin = new User(jtfUser.getText(), jtfPassword.getText());
                 
                 // Comprobamos que el usuario y la contraseña son válidas.
                 if (Login.isValidUser(userTryingToLogin)) {
                     // Buscamos el id de ese usuario
                     int userId = ((User) dbh.search(DatabaseConnector.getConnection(), userTryingToLogin)).getId();;
-                    user = new User(userId, userTryingToLogin.getName(), userTryingToLogin.getPassword());
-=======
-                if (Login.isValidUser(userTryingToLogin)) {
-                    user = userTryingToLogin;
->>>>>>> parent of 468b623... Pedidos funcionando!
-=======
-                if (Login.isValidUser(userTryingToLogin)) {
-                    user = userTryingToLogin;
->>>>>>> parent of 468b623... Pedidos funcionando!
+//                    user = new User(userId, userTryingToLogin.getName(), userTryingToLogin.getPassword());
                     JOptionPane.showMessageDialog(null, "Bienvenido");
                     jbAddOrder.setEnabled(true);
                     // Cuando el usuario se loggea con éxito se instancia el gestor de la tienda.
-                    JFApp.shop = new Shop(user);
                 } else {
                     JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectas.");
                 }

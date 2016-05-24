@@ -196,7 +196,6 @@ public class JPApp extends javax.swing.JPanel {
         // Cogel item seleccionado del array de items que hay disponibles.
         for (Item item : items) {
             if (item.getName().equals(jcbItems.getSelectedItem())) {
-                JFApp.shop.addToOrder(item);
             }
         }
     }
