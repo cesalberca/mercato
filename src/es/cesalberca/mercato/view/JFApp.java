@@ -102,13 +102,15 @@ public class JFApp extends javax.swing.JFrame {
 
     private void jmiSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiSaveActionPerformed
         try {
-            if (JPApp.getUser() != null) {
+            if (JPApp.getUser() == null) {
+                JOptionPane.showMessageDialog(null, "Necesitas iniciar sesión primero");
+            } else if (jpa.getSelectedItems().size() == 0){
+                JOptionPane.showMessageDialog(null, "Necesitas añadir items primero");
+            } else {
                 int orderId = dbh.getLastId(DatabaseConnector.getConnection(), "ORDER");
                 Order order = new Order(orderId, selectedItems, JPApp.getUser());
                 dbh.insert(DatabaseConnector.getConnection(), order);
                 JOptionPane.showMessageDialog(null, "Pedido guardado correctamente");
-            } else {
-                JOptionPane.showMessageDialog(null, "Necesitas iniciar sesión primero");
             }
             // Limpar jtable aquí
         } catch (SQLException ex) {

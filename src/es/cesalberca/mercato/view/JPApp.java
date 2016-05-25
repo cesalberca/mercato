@@ -30,6 +30,10 @@ public class JPApp extends javax.swing.JPanel {
     protected static User user;
     protected static ArrayList<Item> selectedItems = null;
 
+    public static ArrayList<Item> getSelectedItems() {
+        return selectedItems;
+    }
+    
     public static User getUser() {
         return user;
     }
