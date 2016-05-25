@@ -24,8 +24,16 @@ public class DatabaseHandler {
     public void insert(Connection c, Order order) throws SQLException {
         PreparedStatement ps = null;
         String sqlInsert;
+        String sqlInsertUser;
+        
+        sqlInsertUser = "INSERT INTO USER_ORDER VALUES (?, ?);";
+        ps = c.prepareStatement(sqlInsertUser);
+        ps.setInt(1, order.getId());
+        ps.setInt(2, order.getUser().getId());
+        ps.executeUpdate();
+        
         for (Item item : order.getItems()) {
-            sqlInsert = "INSERT INTO ORDER_ITEM VALUES (?, ?)";
+            sqlInsert = "INSERT INTO ORDER_ITEM VALUES (?, ?);";
             ps = c.prepareStatement(sqlInsert);
             ps.setInt(1, order.getUser().getId());
             ps.setInt(2, item.getId());
@@ -177,11 +185,9 @@ public class DatabaseHandler {
      */
     public int getLastId(Connection c, String table) throws SQLException {
         int lastId = -1;
-        PreparedStatement ps = null;
-        String selectSQL = "SELECT MAX(ID) FROM ?;";
-        ps = c.prepareStatement(selectSQL);
-        ps.setString(1, table);
-        ResultSet rs = ps.executeQuery();
+        String selectSQL = "SELECT MAX(ID) FROM `" + table + "`";
+        PreparedStatement preparedStatement = c.prepareStatement(selectSQL);
+        ResultSet rs = preparedStatement.executeQuery();
         
         if(rs.next()) {
             lastId = rs.getInt(1);

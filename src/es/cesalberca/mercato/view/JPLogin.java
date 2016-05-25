@@ -11,7 +11,7 @@ import javax.swing.*;
 
 /**
  * Modal para el inicio de sesión.
- * @author Cesar
+ * @author César Alberca
  */
 public class JPLogin extends javax.swing.JPanel {
     protected static User user = null;

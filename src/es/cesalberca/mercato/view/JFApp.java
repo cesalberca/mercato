@@ -31,6 +31,7 @@ public class JFApp extends javax.swing.JFrame {
         this.setBounds(100, 100, 500, 600);
         this.getContentPane().add(jpa);
         this.setVisible(true);
+        
         try {
             // Al iniciar la aplicación se genera una nueva conexión.
             dbh = new DatabaseHandler();
@@ -101,7 +102,8 @@ public class JFApp extends javax.swing.JFrame {
 
     private void jmiSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiSaveActionPerformed
         try {
-            Order order = new Order(selectedItems, user);
+            int orderId = dbh.getLastId(DatabaseConnector.getConnection(), "ORDER");
+            Order order = new Order(orderId, selectedItems, user);
             dbh.insert(DatabaseConnector.getConnection(), order);
             JOptionPane.showMessageDialog(null, "Pedido guardado correctamente");
             // Limpar jtable aquí
@@ -152,6 +154,6 @@ public class JFApp extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jmiSave;
+    protected javax.swing.JMenuItem jmiSave;
     // End of variables declaration//GEN-END:variables
 }
