@@ -8,7 +8,7 @@ public class Item {
     private int id;
     private String name;
     private float prize;
-    private int idCategory;
+    private Category category;
     
     /**
      * Este constructor
@@ -18,11 +18,11 @@ public class Item {
         this.name = name;
     }
 
-    public Item(int id, String name, float prize, int idCategory) {
+    public Item(int id, String name, float prize, Category category) {
         this.id = id;
         this.name = name;
         this.prize = prize;
-        this.idCategory = idCategory;
+        this.category = category;
     }
 
     public int getId() {
@@ -37,12 +37,7 @@ public class Item {
         return prize;
     }
 
-    public int getCategory() {
-        return idCategory;
-    }
-
-    @Override
-    public String toString() {
-        return "Item{" + "id=" + id + ", name=" + name + ", prize=" + prize + ", idCategory=" + idCategory + '}';
+    public Category getCategory() {
+        return category;
     }
 }

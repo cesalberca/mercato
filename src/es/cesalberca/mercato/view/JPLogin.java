@@ -11,12 +11,11 @@ import javax.swing.*;
 
 /**
  * Modal para el inicio de sesión.
- * @author Cesar
+ * @author César Alberca
  */
 public class JPLogin extends javax.swing.JPanel {
-    protected static User user = null;
     
-    public JPLogin() {
+    public JPLogin(JPApp jpa) {
         initComponents();
     }
     
@@ -24,7 +23,7 @@ public class JPLogin extends javax.swing.JPanel {
      * Genera un modal con usuario y contraseña.
      * @param jbAddOrder Botón que se desactiva cuando se inicie sesión correctamente.
      */
-    public static void login(JButton jbAddOrder){
+    public static void login(JPApp jpa){
         JTextField jtfUser = new JTextField(5);
         JTextField jtfPassword = new JTextField(5);
 
@@ -44,9 +43,9 @@ public class JPLogin extends javax.swing.JPanel {
                 if (Login.isValidUser(userTryingToLogin)) {
                     // Buscamos el id
                     int userId = ((User) dbh.search(DatabaseConnector.getConnection(), userTryingToLogin)).getId();;
-                    user = new User(userId, userTryingToLogin.getName(), userTryingToLogin.getPassword());
+                    JPApp.setUser(new User(userId, userTryingToLogin.getName(), userTryingToLogin.getPassword()));
                     JOptionPane.showMessageDialog(null, "Bienvenido");
-                    jbAddOrder.setEnabled(true);
+                    jpa.jbAddOrder.setEnabled(true);
                 } else {
                     JOptionPane.showMessageDialog(null, "Error al iniciar sesión");
                 }

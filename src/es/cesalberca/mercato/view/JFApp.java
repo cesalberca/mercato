@@ -10,7 +10,6 @@ import es.cesalberca.mercato.controller.database.DatabaseHandler;
 import es.cesalberca.mercato.model.Item;
 import es.cesalberca.mercato.model.Order;
 import static es.cesalberca.mercato.view.JPApp.selectedItems;
-import static es.cesalberca.mercato.view.JPLogin.user;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,7 +29,9 @@ public class JFApp extends javax.swing.JFrame {
         initComponents();
         this.setBounds(100, 100, 500, 600);
         this.getContentPane().add(jpa);
+        this.setTitle("Mercato");
         this.setVisible(true);
+        
         try {
             // Al iniciar la aplicación se genera una nueva conexión.
             dbh = new DatabaseHandler();
@@ -101,10 +102,18 @@ public class JFApp extends javax.swing.JFrame {
 
     private void jmiSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiSaveActionPerformed
         try {
-            Order order = new Order(selectedItems, user);
-            dbh.insert(DatabaseConnector.getConnection(), order);
-            JOptionPane.showMessageDialog(null, "Pedido guardado correctamente");
-            // Limpar jtable aquí
+            if (JPApp.getUser() == null) {
+                JOptionPane.showMessageDialog(null, "Necesitas iniciar sesión primero");
+            } else if (jpa.getSelectedItems().size() == 0){
+                JOptionPane.showMessageDialog(null, "Necesitas añadir items primero");
+            } else {
+                int orderId = dbh.getLastId(DatabaseConnector.getConnection(), "ORDER");
+                Order order = new Order(orderId, selectedItems, JPApp.getUser());
+                dbh.insert(DatabaseConnector.getConnection(), order);
+                JOptionPane.showMessageDialog(null, "Pedido guardado correctamente");
+                jpa.clearItems();
+                jpa.repaintTable();
+            }
         } catch (SQLException ex) {
             Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Pedido no guardado correctamente. Inténtalo de nuevo más tarde");
@@ -152,6 +161,6 @@ public class JFApp extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jmiSave;
+    protected javax.swing.JMenuItem jmiSave;
     // End of variables declaration//GEN-END:variables
 }

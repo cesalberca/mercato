@@ -17,6 +17,8 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JMenuItem;
 
 /**
  * Panel principal de la aplicación.
@@ -25,8 +27,20 @@ import javax.swing.JButton;
 public class JPApp extends javax.swing.JPanel {
     private static ArrayList<Item> items = null;
     protected static Order order = null;
-    protected static User u;
+    protected static User user;
     protected static ArrayList<Item> selectedItems = null;
+
+    public static ArrayList<Item> getSelectedItems() {
+        return selectedItems;
+    }
+    
+    public static User getUser() {
+        return user;
+    }
+
+    public static void setUser(User user) {
+        JPApp.user = user;
+    }
     
     public JPApp() {
         initComponents();
@@ -170,40 +184,40 @@ public class JPApp extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    protected void repaintTable() {
+        Vector headersTable = new Vector();
+        headersTable.add("Nombre");
+        headersTable.add("Precio");
+        headersTable.add("Categoría");
+
+        DefaultTableModel dtm = new DefaultTableModel(headersTable, 0);
+        jtOrders.setModel(dtm);
+
+        for (int i=0;i<selectedItems.size();i++){
+            dtm.setRowCount(dtm.getRowCount()+1);
+            jtOrders.setValueAt(selectedItems.get(i).getName(), i, 0);
+            jtOrders.setValueAt(selectedItems.get(i).getPrize(), i, 1);
+            jtOrders.setValueAt(selectedItems.get(i).getCategory().getName(), i, 2);
+        }
+    }
+    
     /**
      * Añade un item al pedido.
      */
     private void addItemToOrder() {
-        try {
-            Item selectedItem = null;
-            
-            for (Item item : items) {
-                if (item.getName().equals(jcbItems.getSelectedItem())) {
-                    selectedItem = item;
-                }
+        Item selectedItem = null;
+
+        for (Item item : items) {
+            if (item.getName().equals(jcbItems.getSelectedItem())) {
+                selectedItem = item;
             }
-            
-            selectedItems.add(selectedItem);
-            
-            Vector headersTable = new Vector();
-            headersTable.add("Nombre");
-            headersTable.add("Precio");
-            headersTable.add("Categoría");
-            
-            DefaultTableModel dtm = new DefaultTableModel(headersTable, 0);
-            jtOrders.setModel(dtm);
-            
-            for (int i=0;i<selectedItems.size();i++){
-                dtm.setRowCount(dtm.getRowCount()+1);
-                jtOrders.setValueAt(selectedItems.get(i).getName(), i, 0);
-                jtOrders.setValueAt(selectedItems.get(i).getPrize(), i, 1);
-                jtOrders.setValueAt(dbh.getCategoryById(DatabaseConnector.getConnection(), selectedItems.get(i).getCategory()).getName(), i, 2);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(JPApp.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(JPApp.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        selectedItems.add(selectedItem);
+    }
+    
+    public void clearItems() {
+        selectedItems.clear();
     }
     
     /**
@@ -214,11 +228,13 @@ public class JPApp extends javax.swing.JPanel {
             items = dbh.searchItemsByCategory(DatabaseConnector.getConnection(), jcbCategories.getSelectedItem().toString());
             // Comprueba que hay resultados
             if (items.size() > 0) {
+                jcbItems.setEnabled(true);
                 for (Item item : items) {
                     jcbItems.addItem(item.getName());
                 }
             } else {
                 jcbItems.addItem("----");
+                jcbItems.setEnabled(false);
             }
             
         } catch (SQLException ex) {
@@ -249,7 +265,7 @@ public class JPApp extends javax.swing.JPanel {
     }
     
     private void jbLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbLoginActionPerformed
-        JPLogin.login(jbAddOrder);
+        JPLogin.login(this);
     }//GEN-LAST:event_jbLoginActionPerformed
 
     private void jbSignupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSignupActionPerformed
@@ -263,6 +279,7 @@ public class JPApp extends javax.swing.JPanel {
 
     private void jbAddOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAddOrderActionPerformed
         addItemToOrder();
+        repaintTable();
     }//GEN-LAST:event_jbAddOrderActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
