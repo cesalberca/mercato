@@ -17,6 +17,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 
 /**
@@ -26,8 +27,16 @@ import javax.swing.JMenuItem;
 public class JPApp extends javax.swing.JPanel {
     private static ArrayList<Item> items = null;
     protected static Order order = null;
-    protected static User u;
+    protected static User user;
     protected static ArrayList<Item> selectedItems = null;
+
+    public static User getUser() {
+        return user;
+    }
+
+    public static void setUser(User user) {
+        JPApp.user = user;
+    }
     
     public JPApp() {
         initComponents();
@@ -46,6 +55,8 @@ public class JPApp extends javax.swing.JPanel {
                 }
             }
         });
+        
+        
     }
 
     /**
@@ -242,6 +253,7 @@ public class JPApp extends javax.swing.JPanel {
                 jcbCategories.addItem(c.getName());
             }
             
+            
         } catch (SQLException ex) {
             Logger.getLogger(JPApp.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
@@ -249,8 +261,10 @@ public class JPApp extends javax.swing.JPanel {
         }
     }
     
+    
+    
     private void jbLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbLoginActionPerformed
-        JPLogin.login(jbAddOrder);
+        JPLogin.login(this);
     }//GEN-LAST:event_jbLoginActionPerformed
 
     private void jbSignupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSignupActionPerformed

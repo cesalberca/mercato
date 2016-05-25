@@ -10,7 +10,6 @@ import es.cesalberca.mercato.controller.database.DatabaseHandler;
 import es.cesalberca.mercato.model.Item;
 import es.cesalberca.mercato.model.Order;
 import static es.cesalberca.mercato.view.JPApp.selectedItems;
-import static es.cesalberca.mercato.view.JPLogin.user;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,6 +29,7 @@ public class JFApp extends javax.swing.JFrame {
         initComponents();
         this.setBounds(100, 100, 500, 600);
         this.getContentPane().add(jpa);
+        this.setTitle("Mercato");
         this.setVisible(true);
         
         try {
@@ -102,10 +102,14 @@ public class JFApp extends javax.swing.JFrame {
 
     private void jmiSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiSaveActionPerformed
         try {
-            int orderId = dbh.getLastId(DatabaseConnector.getConnection(), "ORDER");
-            Order order = new Order(orderId, selectedItems, user);
-            dbh.insert(DatabaseConnector.getConnection(), order);
-            JOptionPane.showMessageDialog(null, "Pedido guardado correctamente");
+            if (JPApp.getUser() != null) {
+                int orderId = dbh.getLastId(DatabaseConnector.getConnection(), "ORDER");
+                Order order = new Order(orderId, selectedItems, JPApp.getUser());
+                dbh.insert(DatabaseConnector.getConnection(), order);
+                JOptionPane.showMessageDialog(null, "Pedido guardado correctamente");
+            } else {
+                JOptionPane.showMessageDialog(null, "Necesitas iniciar sesión primero");
+            }
             // Limpar jtable aquí
         } catch (SQLException ex) {
             Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);
