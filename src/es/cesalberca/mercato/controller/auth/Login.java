@@ -1,10 +1,8 @@
 package es.cesalberca.mercato.controller.auth;
 
-import es.cesalberca.mercato.controller.database.DatabaseHandler;
 import es.cesalberca.mercato.controller.database.DatabaseConnector;
 import es.cesalberca.mercato.model.User;
 import static es.cesalberca.mercato.view.JFApp.dbh;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
