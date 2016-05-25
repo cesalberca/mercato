@@ -111,8 +111,9 @@ public class JFApp extends javax.swing.JFrame {
                 Order order = new Order(orderId, selectedItems, JPApp.getUser());
                 dbh.insert(DatabaseConnector.getConnection(), order);
                 JOptionPane.showMessageDialog(null, "Pedido guardado correctamente");
+                jpa.clearItems();
+                jpa.repaintTable();
             }
-            // Limpar jtable aquí
         } catch (SQLException ex) {
             Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Pedido no guardado correctamente. Inténtalo de nuevo más tarde");

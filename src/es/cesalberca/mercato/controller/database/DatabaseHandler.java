@@ -69,7 +69,7 @@ public class DatabaseHandler {
         ps.setString(1, item.getName());
         // Los precios admiten decimales, pero sqlite no. Con lo que guardamos los precios multiplicados por 100 para quitar los decimales. Luego hacemos un cast a int.
         ps.setInt(2, (int)(item.getPrize() * 100));
-        ps.setInt(3, item.getCategory());
+        ps.setInt(3, item.getCategory().getId());
         ps.executeUpdate();
     }
     
@@ -123,9 +123,13 @@ public class DatabaseHandler {
         ps = c.prepareStatement(selectSQL);
         ps.setString(1, searchedItem.getName());
         ResultSet rs = ps.executeQuery();
+        int idCat;
+        Category category;
         
         while(rs.next()) {
-            i = new Item(rs.getInt("ID"), rs.getString("NAME"), rs.getFloat("PRIZE") / 100, rs.getInt("ID_CATEGORY"));
+            idCat = rs.getInt("ID_CATEGORY");
+            category = this.getCategoryById(c, idCat);
+            i = new Item(rs.getInt("ID"), rs.getString("NAME"), rs.getFloat("PRIZE") / 100, category);
         }
         
         return i;
@@ -134,21 +138,25 @@ public class DatabaseHandler {
     /**
      * Busca items basados en su categoría.
      * @param c Conexión a la base de datos.
-     * @param category Categoría por la que filtrar.
+     * @param sCategory Categoría por la que filtrar.
      * @return ArrayList con los items encontrados.
      * @throws SQLException Error de sql.
      */
-    public ArrayList<Item> searchItemsByCategory(Connection c, String category) throws SQLException {
+    public ArrayList<Item> searchItemsByCategory(Connection c, String sCategory) throws SQLException {
         PreparedStatement ps = null;
         ArrayList<Item> items = new ArrayList<>();
         Item i = null;
         String selectSQL = "SELECT * FROM ITEM WHERE ID_CATEGORY = (SELECT ID FROM CATEGORY WHERE NAME LIKE ?)";
         ps = c.prepareStatement(selectSQL);
-        ps.setString(1, category);
+        ps.setString(1, sCategory);
         ResultSet rs = ps.executeQuery();
+        int idCat;
+        Category category;
         
         while(rs.next()) {
-            items.add(new Item(rs.getInt("ID"), rs.getString("NAME"), rs.getFloat("PRIZE") / 100, rs.getInt("ID_CATEGORY")));
+            idCat = rs.getInt("ID_CATEGORY");
+            category = this.getCategoryById(c, idCat);
+            items.add(new Item(rs.getInt("ID"), rs.getString("NAME"), rs.getFloat("PRIZE") / 100, category));
         }
         
         return items;
