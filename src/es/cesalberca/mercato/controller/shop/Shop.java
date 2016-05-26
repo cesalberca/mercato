@@ -3,6 +3,7 @@ package es.cesalberca.mercato.controller.shop;
 import es.cesalberca.mercato.controller.database.DatabaseConnector;
 import es.cesalberca.mercato.controller.database.DatabaseHandler;
 import es.cesalberca.mercato.model.Item;
+import es.cesalberca.mercato.model.User;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -11,7 +12,8 @@ import java.util.ArrayList;
  * @author César Alberca
  */
 public class Shop {
-    private static ArrayList<Item> itemsOrder;
+    private User user;
+    private ArrayList<Item> itemsOrder;
     private DatabaseHandler dbh;
     
     public Shop(DatabaseHandler dbh) throws ClassNotFoundException, SQLException {
@@ -27,8 +29,14 @@ public class Shop {
         itemsOrder.clear();
     }
 
-    public static ArrayList<Item> getItemsOrder() {
+    public ArrayList<Item> getItemsOrder() {
         return itemsOrder;
+    }
+    
+    public void checkout() {
+        if (this.user.isLoggedIn()) {
+            // 
+        }
     }
     
     public ArrayList<Item> getItemsFromDatabase(String category) throws SQLException, ClassNotFoundException {

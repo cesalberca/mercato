@@ -11,7 +11,8 @@ public class User {
     private String name;
     private String password;
     private ArrayList<Order> orders;
-    
+    private boolean loggedIn;
+
     public User(String name) {
         this.name = name;
     }
@@ -39,6 +40,10 @@ public class User {
         return id;
     }
 
+    public boolean isLoggedIn() {
+        return loggedIn;
+    }
+    
     @Override
     public String toString() {
         return "User{" + "id=" + id + ", name=" + name + ", password=" + password + ", orders=" + orders + '}';
