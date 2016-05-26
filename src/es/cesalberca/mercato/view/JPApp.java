@@ -1,17 +1,17 @@
 package es.cesalberca.mercato.view;
 
+import es.cesalberca.mercato.controller.auth.Login;
 import es.cesalberca.mercato.controller.database.DatabaseConnector;
+import es.cesalberca.mercato.controller.shop.Shop;
 import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
-import static es.cesalberca.mercato.view.JFApp.dbh;
 import es.cesalberca.mercato.model.Category;
 import es.cesalberca.mercato.model.Item;
 import es.cesalberca.mercato.model.Order;
 import es.cesalberca.mercato.model.User;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,8 +38,11 @@ public class JPApp extends javax.swing.JPanel {
         JPApp.user = user;
     }
     
-    public JPApp() {
+    private Shop shop = null;
+    
+    public JPApp(Shop shop) {
         initComponents();
+        this.shop = shop;
         items = new ArrayList<>();
         selectedItems = new ArrayList<>();
         jbAddOrder.setEnabled(false);
@@ -221,7 +224,7 @@ public class JPApp extends javax.swing.JPanel {
      */
     private void loadItems() {
         try {
-            items = dbh.searchItemsByCategory(DatabaseConnector.getConnection(), jcbCategories.getSelectedItem().toString());
+            shop.getItemsFromDatabase(jcbCategories.getSelectedItem().toString());
             // Comprueba que hay resultados
             if (items.size() > 0) {
                 jcbItems.setEnabled(true);
@@ -245,14 +248,11 @@ public class JPApp extends javax.swing.JPanel {
      */
     private void loadCategories() {
         try {
-            ResultSet rs = dbh.selectAll(DatabaseConnector.getConnection(), "Category");
-            Category c = null;
+            ArrayList<Category> categories = shop.getCategoriesFromDatabase();
             
-            while (rs.next()) {
-                c = new Category(rs.getString("NAME"), rs.getInt("ID"));
-                jcbCategories.addItem(c.getName());
+            for (Category category : categories) {
+                jcbCategories.addItem(category.getName());
             }
-            
         } catch (SQLException ex) {
             Logger.getLogger(JPApp.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
@@ -261,7 +261,7 @@ public class JPApp extends javax.swing.JPanel {
     }
     
     private void jbLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbLoginActionPerformed
-        JPLogin.login(this);
+        Login login = new Login(this.shop);
     }//GEN-LAST:event_jbLoginActionPerformed
 
     private void jbSignupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSignupActionPerformed
