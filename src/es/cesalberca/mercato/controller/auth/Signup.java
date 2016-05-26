@@ -2,8 +2,8 @@ package es.cesalberca.mercato.controller.auth;
 
 import es.cesalberca.mercato.controller.database.DatabaseConnector;
 import es.cesalberca.mercato.controller.database.DatabaseHandler;
+import es.cesalberca.mercato.controller.shop.Shop;
 import es.cesalberca.mercato.model.User;
-import static es.cesalberca.mercato.view.JFApp.dbh;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -12,6 +12,11 @@ import java.sql.SQLException;
  * @author César Alberca
  */
 public class Signup {
+    private Shop shop;
+    
+    public Signup(Shop shop) {
+        this.shop = shop;
+    }
     /**
      * Comprueba si ese nombre de usuario está disponible.
      * @param u Usuario del que se comprobará el nombre.
@@ -19,9 +24,9 @@ public class Signup {
      * @throws SQLException Error de sql.
      * @throws ClassNotFoundException Error de carga del jdbc.
      */
-    public static boolean isUserAvailable(User u) throws SQLException, ClassNotFoundException {
+    public boolean isUserAvailable(User u) throws SQLException, ClassNotFoundException {
         ResultSet rs = null;
-        rs = dbh.selectAll(DatabaseConnector.getConnection(),"User");
+        rs = shop.getDbh().selectAll(DatabaseConnector.getConnection(), "User");
         User existingUser = null;
         
         while (rs.next()) {

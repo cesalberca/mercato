@@ -162,6 +162,20 @@ public class DatabaseHandler {
         return items;
     }
     
+    public ArrayList<Category> getCategories(Connection c) throws SQLException {
+        ArrayList<Category> categories = new ArrayList<>();
+        String selectSQL = "SELECT * FROM Category;";
+        PreparedStatement preparedStatement = c.prepareStatement(selectSQL);
+        ResultSet rs = preparedStatement.executeQuery();
+        Category category = null;
+            
+        while (rs.next()) {
+            categories.add(new Category(rs.getString("NAME"), rs.getInt("ID")));
+        }
+        
+        return categories;
+    }
+    
     /**
      * Busca una categoría por id.
      * @param c Conexión a la base de datos.

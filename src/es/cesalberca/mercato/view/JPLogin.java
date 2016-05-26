@@ -3,7 +3,6 @@ package es.cesalberca.mercato.view;
 import es.cesalberca.mercato.controller.auth.Login;
 import es.cesalberca.mercato.controller.database.DatabaseConnector;
 import es.cesalberca.mercato.model.User;
-import static es.cesalberca.mercato.view.JFApp.dbh;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,15 +14,9 @@ import javax.swing.*;
  */
 public class JPLogin extends javax.swing.JPanel {
     
-    public JPLogin(JPApp jpa) {
+    public JPLogin(JFApp jfa) {
         initComponents();
-    }
-    
-    /**
-     * Genera un modal con usuario y contraseña.
-     * @param jbAddOrder Botón que se desactiva cuando se inicie sesión correctamente.
-     */
-    public static void login(JPApp jpa){
+        Login login = new Login(jfa.);
         JTextField jtfUser = new JTextField(5);
         JTextField jtfPassword = new JTextField(5);
 
@@ -40,7 +33,7 @@ public class JPLogin extends javax.swing.JPanel {
         if (result == JOptionPane.OK_OPTION) {
             try {
                 User userTryingToLogin = new User(jtfUser.getText(), jtfPassword.getText());
-                if (Login.isValidUser(userTryingToLogin)) {
+                if (login.isValidUser(userTryingToLogin)) {
                     // Buscamos el id
                     int userId = ((User) dbh.search(DatabaseConnector.getConnection(), userTryingToLogin)).getId();;
                     JPApp.setUser(new User(userId, userTryingToLogin.getName(), userTryingToLogin.getPassword()));
@@ -56,7 +49,7 @@ public class JPLogin extends javax.swing.JPanel {
             }
         }
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
