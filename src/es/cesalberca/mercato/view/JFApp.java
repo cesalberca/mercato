@@ -7,9 +7,7 @@ package es.cesalberca.mercato.view;
 
 import es.cesalberca.mercato.controller.database.DatabaseConnector;
 import es.cesalberca.mercato.controller.database.DatabaseHandler;
-import es.cesalberca.mercato.model.Item;
-import es.cesalberca.mercato.model.Order;
-import static es.cesalberca.mercato.view.JPApp.selectedItems;
+import es.cesalberca.mercato.controller.shop.Shop;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,20 +19,18 @@ import javax.swing.JOptionPane;
  */
 public class JFApp extends javax.swing.JFrame {
 
-    JPApp jpa = new JPApp();
-    // Solo habrá un DatabaseHandler para toda la app.
-    public static DatabaseHandler dbh = null;
+    JPApp jpa;
+    private Shop shop;
   
     public JFApp() {
         initComponents();
         this.setBounds(100, 100, 500, 600);
-        this.getContentPane().add(jpa);
         this.setTitle("Mercato");
         this.setVisible(true);
         
         try {
             // Al iniciar la aplicación se genera una nueva conexión.
-            dbh = new DatabaseHandler();
+            shop = new Shop(new DatabaseHandler());
             DatabaseConnector.newConnection();
         } catch (ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(null, "BBDD no disponible");
@@ -43,6 +39,8 @@ public class JFApp extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "BBDD no disponible");
             Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);
         }
+        jpa = new JPApp(shop);
+        this.getContentPane().add(jpa);
     }
 
     /**
@@ -102,17 +100,15 @@ public class JFApp extends javax.swing.JFrame {
 
     private void jmiSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiSaveActionPerformed
         try {
-            if (JPApp.getUser() == null) {
+            if (shop.getUser() == null) {
                 JOptionPane.showMessageDialog(null, "Necesitas iniciar sesión primero");
-            } else if (jpa.getSelectedItems().size() == 0){
+            } else if (shop.getItemsOrder().isEmpty()){
                 JOptionPane.showMessageDialog(null, "Necesitas añadir items primero");
             } else {
-                int orderId = dbh.getLastId(DatabaseConnector.getConnection(), "ORDER");
-                Order order = new Order(orderId, selectedItems, JPApp.getUser());
-                dbh.insert(DatabaseConnector.getConnection(), order);
+                shop.checkout();
                 JOptionPane.showMessageDialog(null, "Pedido guardado correctamente");
-                jpa.clearItems();
-                jpa.repaintTable();
+                shop.clearOrder();
+                jpa.repaintTable(shop.getItemsOrder());
             }
         } catch (SQLException ex) {
             Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);

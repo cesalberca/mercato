@@ -1,8 +1,8 @@
 package es.cesalberca.mercato.controller.auth;
 
 import es.cesalberca.mercato.controller.database.DatabaseConnector;
+import es.cesalberca.mercato.controller.shop.Shop;
 import es.cesalberca.mercato.model.User;
-import static es.cesalberca.mercato.view.JFApp.dbh;
 import java.sql.SQLException;
 
 /**
@@ -11,10 +11,15 @@ import java.sql.SQLException;
  */
 public class Login {
     // Intentos disponibles
-    public static int tries = 3;
-    public static boolean isUserLoggedIn = false;
+    private int tries = 3;
+    private boolean isUserLoggedIn = false;
+    private Shop shop = null;
+    
+    public Login(Shop shop) {
+        this.shop = shop;
+    }
 
-    public static boolean isIsUserLoggedIn() {
+    public boolean isIsUserLoggedIn() {
         return isUserLoggedIn;
     }
     
@@ -25,15 +30,12 @@ public class Login {
      * @throws SQLException Error de sql.
      * @throws ClassNotFoundException Error de carga del jdbc.
      */
-    public static Boolean isValidUser(User userTryingToLogin) throws SQLException, ClassNotFoundException {
-        User user = (User) dbh.search(DatabaseConnector.getConnection(), userTryingToLogin);
+    public Boolean isValidUser(User userTryingToLogin) throws SQLException, ClassNotFoundException {
+        User user = (User) shop.getDbh().search(DatabaseConnector.getConnection(), userTryingToLogin);
         
         if (user != null && userTryingToLogin.getPassword().equals(user.getPassword())) {
             isUserLoggedIn = true;
             return true;
-        } else if (tries > 0) {
-            tries--;
-            return false;
         } else {
             return false;
         }
