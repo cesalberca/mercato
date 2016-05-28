@@ -1,6 +1,7 @@
 package es.cesalberca.mercato.view;
 
 import es.cesalberca.mercato.controller.auth.Signup;
+import es.cesalberca.mercato.controller.shop.Shop;
 import es.cesalberca.mercato.model.User;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -17,14 +18,9 @@ import javax.swing.JTextField;
  */
 public class JPSignup extends javax.swing.JPanel {
 
-    public JPSignup() {
+    public JPSignup(Shop shop) {
         initComponents();
-    }
-
-    /**
-     * Genera un modal para registrar al usuario.
-     */
-    public static void signup() {
+        Signup signup = new Signup(shop);
         JTextField username = new JTextField(5);
         JTextField password = new JTextField(5);
         JTextField confirmPassword = new JTextField(5);
@@ -46,7 +42,7 @@ public class JPSignup extends javax.swing.JPanel {
                 // Comprobamos en la bbdd que ese nombre de usuario no está cogido.
                 User userTryingToSignup = new User(username.getText(), password.getText());
                 try {
-                    if (Signup.isUserAvailable(userTryingToSignup)) {
+                    if (signup.isUserAvailable(userTryingToSignup)) {
                         Signup.register(userTryingToSignup);
                         JOptionPane.showMessageDialog(null, "Usuario registrado con éxito");
                     } else {

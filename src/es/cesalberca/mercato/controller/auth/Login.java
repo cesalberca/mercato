@@ -13,7 +13,7 @@ public class Login {
     // Intentos disponibles
     private int tries = 3;
     private boolean isUserLoggedIn = false;
-    private Shop shop;
+    private Shop shop = null;
     
     public Login(Shop shop) {
         this.shop = shop;

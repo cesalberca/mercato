@@ -2,6 +2,7 @@ package es.cesalberca.mercato.view;
 
 import es.cesalberca.mercato.controller.auth.Login;
 import es.cesalberca.mercato.controller.database.DatabaseConnector;
+import es.cesalberca.mercato.controller.shop.Shop;
 import es.cesalberca.mercato.model.User;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -14,9 +15,9 @@ import javax.swing.*;
  */
 public class JPLogin extends javax.swing.JPanel {
     
-    public JPLogin(JFApp jfa) {
+    public JPLogin(Shop shop, JPApp jpa) {
         initComponents();
-        Login login = new Login(jfa.);
+        Login login = new Login(shop);
         JTextField jtfUser = new JTextField(5);
         JTextField jtfPassword = new JTextField(5);
 
@@ -35,8 +36,8 @@ public class JPLogin extends javax.swing.JPanel {
                 User userTryingToLogin = new User(jtfUser.getText(), jtfPassword.getText());
                 if (login.isValidUser(userTryingToLogin)) {
                     // Buscamos el id
-                    int userId = ((User) dbh.search(DatabaseConnector.getConnection(), userTryingToLogin)).getId();;
-                    JPApp.setUser(new User(userId, userTryingToLogin.getName(), userTryingToLogin.getPassword()));
+                    int userId = ((User) shop.getDbh().search(DatabaseConnector.getConnection(), userTryingToLogin)).getId();;
+                    shop.setUser(new User(userId, userTryingToLogin.getName(), userTryingToLogin.getPassword()));
                     JOptionPane.showMessageDialog(null, "Bienvenido");
                     jpa.jbAddOrder.setEnabled(true);
                 } else {

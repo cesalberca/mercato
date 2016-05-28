@@ -8,9 +8,6 @@ package es.cesalberca.mercato.view;
 import es.cesalberca.mercato.controller.database.DatabaseConnector;
 import es.cesalberca.mercato.controller.database.DatabaseHandler;
 import es.cesalberca.mercato.controller.shop.Shop;
-import es.cesalberca.mercato.model.Item;
-import es.cesalberca.mercato.model.Order;
-import static es.cesalberca.mercato.view.JPApp.selectedItems;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,14 +19,12 @@ import javax.swing.JOptionPane;
  */
 public class JFApp extends javax.swing.JFrame {
 
-    JPApp jpa = new JPApp(shop);
-    // Solo habrá un DatabaseHandler para toda la app.
-    public static Shop shop = null;
+    JPApp jpa;
+    private Shop shop;
   
     public JFApp() {
         initComponents();
         this.setBounds(100, 100, 500, 600);
-        this.getContentPane().add(jpa);
         this.setTitle("Mercato");
         this.setVisible(true);
         
@@ -44,6 +39,8 @@ public class JFApp extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "BBDD no disponible");
             Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);
         }
+        jpa = new JPApp(shop);
+        this.getContentPane().add(jpa);
     }
 
     /**
@@ -110,8 +107,8 @@ public class JFApp extends javax.swing.JFrame {
             } else {
                 shop.checkout();
                 JOptionPane.showMessageDialog(null, "Pedido guardado correctamente");
-                jpa.clearItems();
-                jpa.repaintTable();
+                shop.clearOrder();
+                jpa.repaintTable(shop.getItemsOrder());
             }
         } catch (SQLException ex) {
             Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);

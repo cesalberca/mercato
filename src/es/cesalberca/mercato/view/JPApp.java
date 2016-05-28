@@ -1,50 +1,33 @@
 package es.cesalberca.mercato.view;
 
-import es.cesalberca.mercato.controller.auth.Login;
-import es.cesalberca.mercato.controller.database.DatabaseConnector;
 import es.cesalberca.mercato.controller.shop.Shop;
 import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 import es.cesalberca.mercato.model.Category;
 import es.cesalberca.mercato.model.Item;
-import es.cesalberca.mercato.model.Order;
-import es.cesalberca.mercato.model.User;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  * Panel principal de la aplicación.
  * @author César Alberca
  */
 public class JPApp extends javax.swing.JPanel {
-    private static ArrayList<Item> items = null;
-    protected static Order order = null;
-    protected static User user;
-    protected static ArrayList<Item> selectedItems = null;
+    private ArrayList<Item> items = null;
+//    protected static Order order = null;
+//    protected static User user;
+//    protected static ArrayList<Item> selectedItems = null;
 
-    public static ArrayList<Item> getSelectedItems() {
-        return selectedItems;
-    }
-    
-    public static User getUser() {
-        return user;
-    }
-
-    public static void setUser(User user) {
-        JPApp.user = user;
-    }
-    
     private Shop shop = null;
     
     public JPApp(Shop shop) {
         initComponents();
         this.shop = shop;
-        items = new ArrayList<>();
-        selectedItems = new ArrayList<>();
         jbAddOrder.setEnabled(false);
         
         // Añadimos un listener event para poder capturar el evento del cambio de estado del combo box.
@@ -183,7 +166,7 @@ public class JPApp extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    protected void repaintTable() {
+    protected void repaintTable(ArrayList<Item> items) {
         Vector headersTable = new Vector();
         headersTable.add("Nombre");
         headersTable.add("Precio");
@@ -192,11 +175,11 @@ public class JPApp extends javax.swing.JPanel {
         DefaultTableModel dtm = new DefaultTableModel(headersTable, 0);
         jtOrders.setModel(dtm);
 
-        for (int i=0;i<selectedItems.size();i++){
+        for (int i=0;i<items.size();i++){
             dtm.setRowCount(dtm.getRowCount()+1);
-            jtOrders.setValueAt(selectedItems.get(i).getName(), i, 0);
-            jtOrders.setValueAt(selectedItems.get(i).getPrize(), i, 1);
-            jtOrders.setValueAt(selectedItems.get(i).getCategory().getName(), i, 2);
+            jtOrders.setValueAt(items.get(i).getName(), i, 0);
+            jtOrders.setValueAt(items.get(i).getPrize(), i, 1);
+            jtOrders.setValueAt(items.get(i).getCategory().getName(), i, 2);
         }
     }
     
@@ -211,12 +194,8 @@ public class JPApp extends javax.swing.JPanel {
                 selectedItem = item;
             }
         }
-
-        selectedItems.add(selectedItem);
-    }
-    
-    public void clearItems() {
-        selectedItems.clear();
+        
+        shop.addToOrder(selectedItem);
     }
     
     /**
@@ -224,7 +203,7 @@ public class JPApp extends javax.swing.JPanel {
      */
     private void loadItems() {
         try {
-            shop.getItemsFromDatabase(jcbCategories.getSelectedItem().toString());
+            items = shop.getItemsFromDatabase(jcbCategories.getSelectedItem().toString());
             // Comprueba que hay resultados
             if (items.size() > 0) {
                 jcbItems.setEnabled(true);
@@ -248,24 +227,26 @@ public class JPApp extends javax.swing.JPanel {
      */
     private void loadCategories() {
         try {
-            ArrayList<Category> categories = shop.getCategoriesFromDatabase();
+            ArrayList<Category> categories = new ArrayList<>();
+            categories = shop.getCategoriesFromDatabase();
             
             for (Category category : categories) {
                 jcbCategories.addItem(category.getName());
             }
         } catch (SQLException ex) {
             Logger.getLogger(JPApp.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Error al conseguir las categorías de la base de datos.");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(JPApp.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
     private void jbLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbLoginActionPerformed
-        Login login = new Login(this.shop);
+        JPLogin jplogin = new JPLogin(shop, this);
     }//GEN-LAST:event_jbLoginActionPerformed
 
     private void jbSignupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSignupActionPerformed
-        JPSignup.signup();
+        JPSignup jpsignup = new JPSignup(shop);
     }//GEN-LAST:event_jbSignupActionPerformed
 
     private void jcbCategoriesFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jcbCategoriesFocusGained
@@ -275,7 +256,7 @@ public class JPApp extends javax.swing.JPanel {
 
     private void jbAddOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAddOrderActionPerformed
         addItemToOrder();
-        repaintTable();
+        repaintTable(shop.getItemsOrder());
     }//GEN-LAST:event_jbAddOrderActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

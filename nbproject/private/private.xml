@@ -3,11 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Cesar/Workspace/Mercato/src/es/cesalberca/mercato/controller/auth/Login.java</file>
-            <file>file:/C:/Users/Cesar/Workspace/Mercato/src/es/cesalberca/mercato/view/JFApp.java</file>
-            <file>file:/C:/Users/Cesar/Workspace/Mercato/src/es/cesalberca/mercato/view/JPLogin.java</file>
-            <file>file:/C:/Users/Cesar/Workspace/Mercato/src/es/cesalberca/mercato/controller/auth/Signup.java</file>
+            <file>file:/C:/Users/Cesar/Workspace/Mercato/src/es/cesalberca/mercato/controller/database/DatabaseHandler.java</file>
             <file>file:/C:/Users/Cesar/Workspace/Mercato/src/es/cesalberca/mercato/view/JPApp.java</file>
+            <file>file:/C:/Users/Cesar/Workspace/Mercato/src/es/cesalberca/mercato/controller/shop/Shop.java</file>
         </group>
     </open-files>
 </project-private>
