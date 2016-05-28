@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package es.cesalberca.mercato.view;
 
 import es.cesalberca.mercato.controller.database.DatabaseConnector;
@@ -18,7 +13,6 @@ import javax.swing.JOptionPane;
  * @author César Alberca
  */
 public class JFApp extends javax.swing.JFrame {
-
     JPApp jpa;
     private Shop shop;
   
