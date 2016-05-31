@@ -43,6 +43,10 @@ public class User {
     public boolean isLoggedIn() {
         return loggedIn;
     }
+
+    public void setLoggedIn(boolean loggedIn) {
+        this.loggedIn = loggedIn;
+    }
     
     @Override
     public String toString() {

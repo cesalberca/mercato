@@ -25,17 +25,24 @@ public class DatabaseHandler {
         PreparedStatement ps = null;
         String sqlInsert;
         String sqlInsertUser;
+        String sqlOrder;
+        
+        // Parece ser que la palabra "ORDER" es una palabra reservada.
+        sqlOrder = "INSERT INTO `ORDER` VALUES (?);";
+        ps = c.prepareStatement(sqlOrder);
+        ps.setInt(1, order.getId());
+        ps.executeUpdate();
         
         sqlInsertUser = "INSERT INTO USER_ORDER VALUES (?, ?);";
         ps = c.prepareStatement(sqlInsertUser);
-        ps.setInt(1, order.getId());
-        ps.setInt(2, order.getUser().getId());
+        ps.setInt(1, order.getUser().getId());
+        ps.setInt(2, order.getId());
         ps.executeUpdate();
         
         for (Item item : order.getItems()) {
             sqlInsert = "INSERT INTO ORDER_ITEM VALUES (?, ?);";
             ps = c.prepareStatement(sqlInsert);
-            ps.setInt(1, order.getUser().getId());
+            ps.setInt(1, order.getId());
             ps.setInt(2, item.getId());
             ps.executeUpdate();
         }
@@ -216,5 +223,19 @@ public class DatabaseHandler {
         }
         
         return lastId + 1;
+    }
+
+    public ArrayList<Order> getOrdersByUser(Connection c, User u) throws SQLException {
+        PreparedStatement ps = null;
+        String selectSQL = "SELECT * FROM CATEGORY WHERE ID = ?";
+        ps = c.prepareStatement(selectSQL);
+        ResultSet rs = ps.executeQuery();
+        Category category = null;
+        
+        while(rs.next()) {
+            category = new Category(rs.getString("NAME"), rs.getInt("ID"));
+        }
+        
+        return new ArrayList<>();
     }
 }

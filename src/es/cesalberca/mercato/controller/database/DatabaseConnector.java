@@ -1,5 +1,6 @@
 package es.cesalberca.mercato.controller.database;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -13,19 +14,31 @@ public class DatabaseConnector {
     private static final String JDBC_CONNECTION = "jdbc:sqlite:";
     private static Connection connection = null;
     
-    public static Connection getConnection() throws ClassNotFoundException, SQLException {
+    /**
+     * Consigue la conexión ya formado con la base de datos.
+     * @return La conexión.
+     * @throws ClassNotFoundException Clase no encontrada.
+     * @throws SQLException Error de sql.
+     */
+    public static Connection getConnection() {
         return connection;
     }
-    
+
     /**
-     * Consigue una conexión a la base de datos.
+     * Consigue una nueva conexión a la base de datos.
      * @return Conexión a la base de datos.
      * @throws ClassNotFoundException Clase no encontrada.
      * @throws SQLException Error al conectarse.
      */
     public static void newConnection() throws ClassNotFoundException, SQLException {
         Class.forName("org.sqlite.JDBC");
-        connection = DriverManager.getConnection(JDBC_CONNECTION + SQLITE_DIRECTORY);
+        // Sqlite crea una nueva base de datos si no encuentra una en esa ruta. Con lo que primeramente tendremos que comprobar que ese fichero existe.
+        File f = new File(SQLITE_DIRECTORY);
+        if (f.exists() && !f.isDirectory()) {
+            connection = DriverManager.getConnection(JDBC_CONNECTION + SQLITE_DIRECTORY);
+        } else {
+            throw new ClassNotFoundException();
+        }
     }
 
     /**

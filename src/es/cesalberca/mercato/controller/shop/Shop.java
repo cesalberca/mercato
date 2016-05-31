@@ -6,18 +6,17 @@ import es.cesalberca.mercato.model.Category;
 import es.cesalberca.mercato.model.Item;
 import es.cesalberca.mercato.model.Order;
 import es.cesalberca.mercato.model.User;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
- *
+ * Clase controladora de la tienda.
  * @author César Alberca
  */
 public class Shop {
     private User user;
-    private ArrayList<Item> itemsOrder;
-    private DatabaseHandler dbh;
+    private ArrayList<Item> itemsOrder = null;
+    private DatabaseHandler dbh = null;
     
     public Shop(DatabaseHandler dbh) throws ClassNotFoundException, SQLException {
         itemsOrder = new ArrayList<>();
@@ -37,11 +36,9 @@ public class Shop {
     }
     
     public void checkout() throws SQLException, ClassNotFoundException {
-        if (this.user.isLoggedIn()) {
-            int orderId = dbh.getLastId(DatabaseConnector.getConnection(), "ORDER");
-            Order order = new Order(orderId, this.itemsOrder, this.user);
-            dbh.insert(DatabaseConnector.getConnection(), order);
-        }
+        int orderId = dbh.getLastId(DatabaseConnector.getConnection(), "ORDER");
+        Order order = new Order(orderId, this.itemsOrder, this.user);
+        dbh.insert(DatabaseConnector.getConnection(), order);
     }
     
     public ArrayList<Item> getItemsFromDatabase(String category) throws SQLException, ClassNotFoundException {

@@ -12,16 +12,13 @@ import java.sql.SQLException;
 public class Login {
     // Intentos disponibles
     private int tries = 3;
-    private boolean isUserLoggedIn = false;
     private Shop shop = null;
     
     public Login(Shop shop) {
         this.shop = shop;
     }
 
-    public boolean isIsUserLoggedIn() {
-        return isUserLoggedIn;
-    }
+    
     
     /**
      * Comprueba si el usuario que se intenta loggear es válido y que su contraseña es correcta.
@@ -34,7 +31,7 @@ public class Login {
         User user = (User) shop.getDbh().search(DatabaseConnector.getConnection(), userTryingToLogin);
         
         if (user != null && userTryingToLogin.getPassword().equals(user.getPassword())) {
-            isUserLoggedIn = true;
+            userTryingToLogin.setLoggedIn(true);
             return true;
         } else {
             return false;

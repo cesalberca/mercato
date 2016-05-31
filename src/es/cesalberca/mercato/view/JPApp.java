@@ -1,5 +1,6 @@
 package es.cesalberca.mercato.view;
 
+import es.cesalberca.mercato.controller.database.DatabaseConnector;
 import es.cesalberca.mercato.controller.shop.Shop;
 import java.util.ArrayList;
 import java.util.Vector;
@@ -19,10 +20,6 @@ import javax.swing.JOptionPane;
  */
 public class JPApp extends javax.swing.JPanel {
     private ArrayList<Item> items = null;
-//    protected static Order order = null;
-//    protected static User user;
-//    protected static ArrayList<Item> selectedItems = null;
-
     private Shop shop = null;
     
     public JPApp(Shop shop) {
@@ -90,9 +87,9 @@ public class JPApp extends javax.swing.JPanel {
         });
 
         jcbCategories.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-------" }));
-        jcbCategories.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jcbCategoriesFocusGained(evt);
+        jcbCategories.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcbCategoriesActionPerformed(evt);
             }
         });
 
@@ -233,12 +230,15 @@ public class JPApp extends javax.swing.JPanel {
             for (Category category : categories) {
                 jcbCategories.addItem(category.getName());
             }
-        } catch (SQLException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(JPApp.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Error al conseguir las categorías de la base de datos.");
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(JPApp.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    void blockButtons() {
+        jbLogin.setEnabled(false);
+        jbSignup.setEnabled(false);
     }
     
     private void jbLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbLoginActionPerformed
@@ -249,15 +249,17 @@ public class JPApp extends javax.swing.JPanel {
         JPSignup jpsignup = new JPSignup(shop);
     }//GEN-LAST:event_jbSignupActionPerformed
 
-    private void jcbCategoriesFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jcbCategoriesFocusGained
-        jcbCategories.removeAllItems();
-        loadCategories();
-    }//GEN-LAST:event_jcbCategoriesFocusGained
-
     private void jbAddOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAddOrderActionPerformed
         addItemToOrder();
         repaintTable(shop.getItemsOrder());
     }//GEN-LAST:event_jbAddOrderActionPerformed
+
+    private void jcbCategoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbCategoriesActionPerformed
+        if (DatabaseConnector.getConnection() != null) {
+            jcbCategories.removeAllItems();
+            loadCategories();
+        }
+    }//GEN-LAST:event_jcbCategoriesActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
@@ -270,4 +272,5 @@ public class JPApp extends javax.swing.JPanel {
     private javax.swing.JLabel jlItem;
     private javax.swing.JTable jtOrders;
     // End of variables declaration//GEN-END:variables
+
 }

@@ -2,6 +2,7 @@ package es.cesalberca.mercato.view;
 
 import es.cesalberca.mercato.controller.database.DatabaseConnector;
 import es.cesalberca.mercato.controller.database.DatabaseHandler;
+import es.cesalberca.mercato.controller.file.FileHandler;
 import es.cesalberca.mercato.controller.shop.Shop;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -13,12 +14,12 @@ import javax.swing.JOptionPane;
  * @author César Alberca
  */
 public class JFApp extends javax.swing.JFrame {
-    JPApp jpa;
-    private Shop shop;
+    JPApp jpa = null;
+    private Shop shop = null;
   
     public JFApp() {
         initComponents();
-        this.setBounds(100, 100, 500, 600);
+        this.setBounds(100, 100, 600, 800);
         this.setTitle("Mercato");
         this.setVisible(true);
         
@@ -26,15 +27,18 @@ public class JFApp extends javax.swing.JFrame {
             // Al iniciar la aplicación se genera una nueva conexión.
             shop = new Shop(new DatabaseHandler());
             DatabaseConnector.newConnection();
-        } catch (ClassNotFoundException ex) {
-            JOptionPane.showMessageDialog(null, "BBDD no disponible");
+        } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "BBDD no disponible");
-            Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Error al conectarse a la base de datos. Prueba a reiniciar la aplicación.");
+        } finally {
+            jpa = new JPApp(shop);
+            this.getContentPane().add(jpa);
+            
+            // Si no hay conexión bloqueamos los botones.
+            if (DatabaseConnector.getConnection() == null) {
+                jpa.blockButtons();
+            }
         }
-        jpa = new JPApp(shop);
-        this.getContentPane().add(jpa);
     }
 
     /**
@@ -49,6 +53,8 @@ public class JFApp extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jmiSave = new javax.swing.JMenuItem();
+        jbNew = new javax.swing.JMenuItem();
+        jbExport = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -68,6 +74,22 @@ public class JFApp extends javax.swing.JFrame {
         });
         jMenu1.add(jmiSave);
 
+        jbNew.setText("Nuevo");
+        jbNew.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbNewActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jbNew);
+
+        jbExport.setText("Generar");
+        jbExport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbExportActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jbExport);
+
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Editar");
@@ -84,9 +106,6 @@ public class JFApp extends javax.swing.JFrame {
             if (DatabaseConnector.getConnection() != null) {
                 DatabaseConnector.disconnect();
             }
-            DatabaseConnector.disconnect();
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -111,6 +130,20 @@ public class JFApp extends javax.swing.JFrame {
             Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jmiSaveActionPerformed
+
+    private void jbExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbExportActionPerformed
+        FileHandler fh = new FileHandler();
+    }//GEN-LAST:event_jbExportActionPerformed
+
+    private void jbNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbNewActionPerformed
+        if (shop.getItemsOrder().size() > 0) {
+            int response = JOptionPane.showConfirmDialog(null, "Borrarás el pedido actual, ¿estás seguro de querer proceder?", "Nuevo pedido", JOptionPane.YES_NO_OPTION);
+            if (response == JOptionPane.YES_OPTION) {
+                shop.clearOrder();
+                jpa.repaintTable(shop.getItemsOrder());
+            }
+        }
+    }//GEN-LAST:event_jbNewActionPerformed
 
     /**
      * @param args the command line arguments
@@ -151,6 +184,8 @@ public class JFApp extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jbExport;
+    private javax.swing.JMenuItem jbNew;
     protected javax.swing.JMenuItem jmiSave;
     // End of variables declaration//GEN-END:variables
 }
