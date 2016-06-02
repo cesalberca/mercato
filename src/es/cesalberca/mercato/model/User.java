@@ -13,10 +13,11 @@ public class User {
     private ArrayList<Order> orders;
     private boolean loggedIn;
 
-    public User(String name) {
-        this.name = name;
-    }
-
+    /**
+     * Este constructor es usado para iniciar sesión.
+     * @param name Nombre de usuario.
+     * @param pass Contraseña del usuario.
+     */
     public User(String name, String pass) {
         this.name = name;
         this.password = pass;

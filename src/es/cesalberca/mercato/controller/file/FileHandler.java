@@ -1,28 +1,25 @@
 package es.cesalberca.mercato.controller.file;
 
-import es.cesalberca.mercato.controller.database.DatabaseConnector;
-import es.cesalberca.mercato.controller.database.DatabaseHandler;
+import es.cesalberca.mercato.controller.database.DBHandler;
 import es.cesalberca.mercato.model.Item;
 import es.cesalberca.mercato.model.Order;
 import es.cesalberca.mercato.model.User;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
 
 /**
- *
+ * Clase que se ocupa de las exportaciones a ficheros.
  * @author César Alberca
  */
 public class FileHandler {
     
     /**
      * Exporta los pedidos de un usuario a html.
-     * @param u
-     * @throws SQLException
-     * @throws FileNotFoundException 
+     * @param u Usuario del que se generarán los datos.
+     * @throws FileNotFoundException Fichero no encontrado.
      */
     public void exportToHtml(User u) throws FileNotFoundException {
-        DatabaseHandler dbh = new DatabaseHandler();
+        DBHandler dbh = new DBHandler();
         PrintWriter pw = null;
         
         pw = new PrintWriter(u.getName() + ".html");

@@ -1,7 +1,7 @@
 package es.cesalberca.mercato.controller.shop;
 
-import es.cesalberca.mercato.controller.database.DatabaseConnector;
-import es.cesalberca.mercato.controller.database.DatabaseHandler;
+import es.cesalberca.mercato.controller.database.DBConnector;
+import es.cesalberca.mercato.controller.database.DBHandler;
 import es.cesalberca.mercato.model.Category;
 import es.cesalberca.mercato.model.Item;
 import es.cesalberca.mercato.model.Order;
@@ -16,47 +16,70 @@ import java.util.ArrayList;
 public class Shop {
     private User user;
     private ArrayList<Item> itemsOrder = null;
-    private DatabaseHandler dbh = null;
+    private DBHandler dbh = null;
     
-    public Shop(DatabaseHandler dbh) throws ClassNotFoundException, SQLException {
+    public Shop(DBHandler dbh) {
         itemsOrder = new ArrayList<>();
         this.dbh = dbh;
     }
     
+    /**
+     * Añade un item al pedido.
+     * @param item Item a añadir.
+     */
     public void addToOrder(Item item) {
         itemsOrder.add(item);
     }
     
+    /**
+     * Destruye el pedido actual.
+     */
     public void clearOrder() {
         itemsOrder.clear();
     }
 
-    public ArrayList<Item> getItemsOrder() {
-        return itemsOrder;
-    }
-    
+    /**
+     * Guarda el pedido en la base de datos.
+     * @throws SQLException Error de sql.
+     * @throws ClassNotFoundException JDBC no encontrado.
+     */
     public void checkout() throws SQLException, ClassNotFoundException {
-        int orderId = dbh.getLastId(DatabaseConnector.getConnection(), "ORDER");
+        // Buscamos un id disponible para el pedido.
+        int orderId = dbh.getAvailableId(DBConnector.getConnection(), "ORDER");
         Order order = new Order(orderId, this.itemsOrder, this.user);
-        //this.user.getOrders().add(order);
-        dbh.insert(DatabaseConnector.getConnection(), order);
+        dbh.insert(DBConnector.getConnection(), order);
     }
     
+    /**
+     * Carga de la base de datos los pedidos del usuario loggeado.
+     * @throws SQLException Error de sql.
+     */
     public void loadOrders() throws SQLException {
-        this.user.setOrders(dbh.getOrdersByUser(DatabaseConnector.getConnection(), this.user.getId()));
+        this.user.setOrders(dbh.getOrdersByUser(DBConnector.getConnection(), this.user.getId()));
     }
     
+    /**
+     * Busca y devuelve los items de la base de datos.
+     * @param category Categoría a partir de la cual se buscarán los items.
+     * @return ArrayList de items.
+     * @throws SQLException Error de sql.
+     * @throws ClassNotFoundException Clase no encontrada.
+     */
     public ArrayList<Item> getItemsFromDatabase(String category) throws SQLException, ClassNotFoundException {
-        ArrayList<Item> items = dbh.searchItemsByCategory(DatabaseConnector.getConnection(), category);
-        return items;
+        return dbh.searchItemsByCategory(DBConnector.getConnection(), category);
     }
     
+    /**
+     * Busca y devuelve las categorías de la base de datos.
+     * @return ArrayList de categorías.
+     * @throws SQLException Error de sql.
+     * @throws ClassNotFoundException Clase no encontrada.
+     */
     public ArrayList<Category> getCategoriesFromDatabase() throws SQLException, ClassNotFoundException {
-        ArrayList<Category> categories = dbh.getCategories(DatabaseConnector.getConnection());
-        return categories;
+        return dbh.getCategories(DBConnector.getConnection());
     }
 
-    public DatabaseHandler getDbh() {
+    public DBHandler getDbh() {
         return dbh;
     }
     
@@ -66,5 +89,9 @@ public class Shop {
 
     public void setUser(User user) {
         this.user = user;
+    }
+    
+    public ArrayList<Item> getItemsOrder() {
+        return itemsOrder;
     }
 }

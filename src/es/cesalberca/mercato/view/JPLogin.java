@@ -1,7 +1,7 @@
 package es.cesalberca.mercato.view;
 
 import es.cesalberca.mercato.controller.auth.Login;
-import es.cesalberca.mercato.controller.database.DatabaseConnector;
+import es.cesalberca.mercato.controller.database.DBConnector;
 import es.cesalberca.mercato.controller.shop.Shop;
 import es.cesalberca.mercato.model.User;
 import java.sql.SQLException;
@@ -15,11 +15,16 @@ import javax.swing.*;
  */
 public class JPLogin extends javax.swing.JPanel {
     
+    /**
+     * Constructor del JPLogin.
+     * @param shop Controlador de la tienda.
+     * @param jpa JPanel para poder activar un botón.
+     */
     public JPLogin(Shop shop, JPApp jpa) {
         initComponents();
         Login login = new Login(shop);
         JTextField jtfUser = new JTextField(5);
-        JTextField jtfPassword = new JTextField(5);
+        JPasswordField jtfPassword = new JPasswordField(5);
 
         JPanel myPanel = new JPanel();
         myPanel.add(new JLabel("Usuario:"));
@@ -34,19 +39,19 @@ public class JPLogin extends javax.swing.JPanel {
         if (result == JOptionPane.OK_OPTION) {
             try {
                 User userTryingToLogin = new User(jtfUser.getText(), jtfPassword.getText());
+                
                 if (login.isValidUser(userTryingToLogin)) {
-                    // Buscamos el id
-                    int userId = ((User) shop.getDbh().search(DatabaseConnector.getConnection(), userTryingToLogin)).getId();;
+                    // Buscamos el id a partir del nombre de usuario.
+                    int userId = ((User) shop.getDbh().search(DBConnector.getConnection(), userTryingToLogin)).getId();;
                     shop.setUser(new User(userId, userTryingToLogin.getName(), userTryingToLogin.getPassword()));
                     JOptionPane.showMessageDialog(null, "Bienvenido");
                     jpa.jbAddOrder.setEnabled(true);
                 } else {
                     JOptionPane.showMessageDialog(null, "Error al iniciar sesión");
                 }
-            } catch (ClassNotFoundException ex) {
+            } catch (ClassNotFoundException | SQLException ex) {
                 Logger.getLogger(JPLogin.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (SQLException ex) {
-                Logger.getLogger(JPLogin.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, "Base de datos no disponible en estos momentos. Inténtalo de nuevo más tarde.");
             }
         }
     }

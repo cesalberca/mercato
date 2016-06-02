@@ -1,6 +1,6 @@
 package es.cesalberca.mercato.view;
 
-import es.cesalberca.mercato.controller.database.DatabaseConnector;
+import es.cesalberca.mercato.controller.database.DBConnector;
 import es.cesalberca.mercato.controller.shop.Shop;
 import java.util.ArrayList;
 import java.util.Vector;
@@ -22,6 +22,14 @@ public class JPApp extends javax.swing.JPanel {
     private ArrayList<Item> items = null;
     private Shop shop = null;
     
+    /**
+     * La tienda (shop) se la pasamos del JFrame al JPanel ya que ambas comparten el mismo controlador.
+     */
+    
+    /**
+     * Constructor del jpanel JPApp
+     * @param shop Controlador de la tienda.
+     */
     public JPApp(Shop shop) {
         initComponents();
         this.shop = shop;
@@ -163,6 +171,10 @@ public class JPApp extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Repinta la tabla del pedido a partir de unos items.
+     * @param items ArrayList de items a partir de los cuales se pinta la tabla.
+     */
     protected void repaintTable(ArrayList<Item> items) {
         Vector headersTable = new Vector();
         headersTable.add("Nombre");
@@ -212,10 +224,9 @@ public class JPApp extends javax.swing.JPanel {
                 jcbItems.setEnabled(false);
             }
             
-        } catch (SQLException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(JPApp.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(JPApp.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Items no disponibles en estos momentos.");
         }
     }
     
@@ -224,8 +235,7 @@ public class JPApp extends javax.swing.JPanel {
      */
     private void loadCategories() {
         try {
-            ArrayList<Category> categories = new ArrayList<>();
-            categories = shop.getCategoriesFromDatabase();
+            ArrayList<Category> categories = shop.getCategoriesFromDatabase();
             
             for (Category category : categories) {
                 jcbCategories.addItem(category.getName());
@@ -236,7 +246,10 @@ public class JPApp extends javax.swing.JPanel {
         }
     }
     
-    void blockButtons() {
+    /**
+     * Bloquea los botones de registro e inicio de sesión.
+     */
+    protected void blockButtons() {
         jbLogin.setEnabled(false);
         jbSignup.setEnabled(false);
     }
@@ -255,7 +268,7 @@ public class JPApp extends javax.swing.JPanel {
     }//GEN-LAST:event_jbAddOrderActionPerformed
 
     private void jcbCategoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbCategoriesActionPerformed
-        if (DatabaseConnector.getConnection() != null) {
+        if (DBConnector.getConnection() != null) {
             jcbCategories.removeAllItems();
             loadCategories();
         }

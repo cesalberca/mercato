@@ -10,6 +10,7 @@ import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 /**
@@ -22,13 +23,13 @@ public class JPSignup extends javax.swing.JPanel {
         initComponents();
         Signup signup = new Signup(shop);
         JTextField username = new JTextField(5);
-        JTextField password = new JTextField(5);
-        JTextField confirmPassword = new JTextField(5);
+        JPasswordField password = new JPasswordField(5);
+        JPasswordField confirmPassword = new JPasswordField(5);
 
         JPanel myPanel = new JPanel();
         myPanel.add(new JLabel("Usuario:"));
         myPanel.add(username);
-        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
+        myPanel.add(Box.createHorizontalStrut(15));
         myPanel.add(new JLabel("Contraseña:"));
         myPanel.add(password);
         myPanel.add(new JLabel("Confirmar contraseña:"));
@@ -39,19 +40,19 @@ public class JPSignup extends javax.swing.JPanel {
         if (result == JOptionPane.OK_OPTION) {
             // Comprobamos que ambas contraseñas coinciden y que no están vacías.
             if (password.getText().equals(confirmPassword.getText()) && !password.getText().isEmpty()) {
-                // Comprobamos en la bbdd que ese nombre de usuario no está cogido.
                 User userTryingToSignup = new User(username.getText(), password.getText());
+                
                 try {
+                    // Comprobamos en la bbdd que ese nombre de usuario no está cogido.
                     if (signup.isUserAvailable(userTryingToSignup)) {
-                        Signup.register(userTryingToSignup);
+                        signup.register(userTryingToSignup);
                         JOptionPane.showMessageDialog(null, "Usuario registrado con éxito");
                     } else {
                         JOptionPane.showMessageDialog(null, "Ya existe un usuario con ese nombre.");
                     }
-                } catch (SQLException ex) {
+                } catch (SQLException | ClassNotFoundException ex) {
                     Logger.getLogger(JPSignup.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(JPSignup.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(null, "Base de datos no disponible en estos momentos. Inténtalo de nuevo más tarde.");
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "Contraseñas no coinciden");

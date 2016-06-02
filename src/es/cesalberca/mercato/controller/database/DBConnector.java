@@ -9,17 +9,14 @@ import java.sql.SQLException;
  * Clase que gestiona las conexiones a la base de datos.
  * @author César Alberca
  */
-public class DatabaseConnector {
+public class DBConnector {
+    // Directorio de sqlite
     private static final String SQLITE_DIRECTORY = "bbdd/mercatodb";
+    // Conexión con el jdbc
     private static final String JDBC_CONNECTION = "jdbc:sqlite:";
+    // Conexión a la bbbdd
     private static Connection connection = null;
     
-    /**
-     * Consigue la conexión ya formado con la base de datos.
-     * @return La conexión.
-     * @throws ClassNotFoundException Clase no encontrada.
-     * @throws SQLException Error de sql.
-     */
     public static Connection getConnection() {
         return connection;
     }
@@ -43,7 +40,6 @@ public class DatabaseConnector {
 
     /**
      * Desconecta de la bbdd habiéndole dado la conexión.
-     * @param c Conexión la cual se debe desconectar.
      * @throws SQLException Error al desconectar.
      */
     public static void disconnect() throws SQLException {

@@ -1,7 +1,7 @@
 package es.cesalberca.mercato.view;
 
-import es.cesalberca.mercato.controller.database.DatabaseConnector;
-import es.cesalberca.mercato.controller.database.DatabaseHandler;
+import es.cesalberca.mercato.controller.database.DBConnector;
+import es.cesalberca.mercato.controller.database.DBHandler;
 import es.cesalberca.mercato.controller.file.FileHandler;
 import es.cesalberca.mercato.controller.shop.Shop;
 import java.io.FileNotFoundException;
@@ -26,8 +26,8 @@ public class JFApp extends javax.swing.JFrame {
         
         try {
             // Al iniciar la aplicación se genera una nueva conexión.
-            shop = new Shop(new DatabaseHandler());
-            DatabaseConnector.newConnection();
+            shop = new Shop(new DBHandler());
+            DBConnector.newConnection();
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Error al conectarse a la base de datos. Prueba a reiniciar la aplicación.");
@@ -36,7 +36,7 @@ public class JFApp extends javax.swing.JFrame {
             this.getContentPane().add(jpa);
             
             // Si no hay conexión bloqueamos los botones.
-            if (DatabaseConnector.getConnection() == null) {
+            if (DBConnector.getConnection() == null) {
                 jpa.blockButtons();
             }
         }
@@ -104,8 +104,8 @@ public class JFApp extends javax.swing.JFrame {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         try {
             // Desonecta de la bbdd en caso que se haya llegado a conectar.
-            if (DatabaseConnector.getConnection() != null) {
-                DatabaseConnector.disconnect();
+            if (DBConnector.getConnection() != null) {
+                DBConnector.disconnect();
             }
         } catch (SQLException ex) {
             Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);
@@ -140,11 +140,16 @@ public class JFApp extends javax.swing.JFrame {
                     shop.loadOrders();
                 } catch (SQLException ex) {
                     Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(null, "Pedidos del usuario no disponibles.");
                 }
                 fh.exportToHtml(shop.getUser());
+                JOptionPane.showMessageDialog(null, "Fichero generado con éxito.");
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, "Error al generar el fichero.");
             }
+        } else {
+            JOptionPane.showMessageDialog(null, "Debes iniciar sesión primero.");
         }
     }//GEN-LAST:event_jbExportActionPerformed
 

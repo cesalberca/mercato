@@ -5,16 +5,16 @@ package es.cesalberca.mercato.model;
  * @author César Alberca
  */
 public class Category {
-    private String name;
     private int id;
+    private String name;
 
     /**
      * Construye una categoría a partir del nombre de la misma.
      * @param name Nombre de la categoría.
      */
-    public Category(String name, int id) {
-        this.name = name;
+    public Category(int id, String name) {
         this.id = id;
+        this.name = name;
     }
 
     public String getName() {

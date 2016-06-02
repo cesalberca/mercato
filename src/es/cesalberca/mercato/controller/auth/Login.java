@@ -1,6 +1,6 @@
 package es.cesalberca.mercato.controller.auth;
 
-import es.cesalberca.mercato.controller.database.DatabaseConnector;
+import es.cesalberca.mercato.controller.database.DBConnector;
 import es.cesalberca.mercato.controller.shop.Shop;
 import es.cesalberca.mercato.model.User;
 import java.sql.SQLException;
@@ -10,15 +10,11 @@ import java.sql.SQLException;
  * @author César Alberca
  */
 public class Login {
-    // Intentos disponibles
-    private int tries = 3;
-    private Shop shop = null;
+    private Shop shop;
     
     public Login(Shop shop) {
         this.shop = shop;
     }
-
-    
     
     /**
      * Comprueba si el usuario que se intenta loggear es válido y que su contraseña es correcta.
@@ -28,7 +24,7 @@ public class Login {
      * @throws ClassNotFoundException Error de carga del jdbc.
      */
     public Boolean isValidUser(User userTryingToLogin) throws SQLException, ClassNotFoundException {
-        User user = (User) shop.getDbh().search(DatabaseConnector.getConnection(), userTryingToLogin);
+        User user = (User) shop.getDbh().search(DBConnector.getConnection(), userTryingToLogin);
         
         if (user != null && userTryingToLogin.getPassword().equals(user.getPassword())) {
             userTryingToLogin.setLoggedIn(true);

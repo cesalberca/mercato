@@ -1,10 +1,9 @@
 package es.cesalberca.mercato.controller.auth;
 
-import es.cesalberca.mercato.controller.database.DatabaseConnector;
-import es.cesalberca.mercato.controller.database.DatabaseHandler;
+import es.cesalberca.mercato.controller.database.DBConnector;
+import es.cesalberca.mercato.controller.database.DBHandler;
 import es.cesalberca.mercato.controller.shop.Shop;
 import es.cesalberca.mercato.model.User;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -17,6 +16,7 @@ public class Signup {
     public Signup(Shop shop) {
         this.shop = shop;
     }
+    
     /**
      * Comprueba si ese nombre de usuario está disponible.
      * @param u Usuario del que se comprobará el nombre.
@@ -25,20 +25,14 @@ public class Signup {
      * @throws ClassNotFoundException Error de carga del jdbc.
      */
     public boolean isUserAvailable(User u) throws SQLException, ClassNotFoundException {
-        ResultSet rs = null;
-        rs = shop.getDbh().selectAll(DatabaseConnector.getConnection(), "User");
-        User existingUser = null;
-        
-        while (rs.next()) {
-            existingUser = new User(rs.getString("NAME"), rs.getString("PASSWORD"));
-            if (existingUser.getName().equals(u.getName())) {
-                // Si encuentra al menos una coincidencia detiene el bucle.
-                return false;
-            }
+        User existingUser = (User) shop.getDbh().search(DBConnector.getConnection(), u);
+
+        if (existingUser != null) {
+            // Si no es nulo eso quiere decir que hay un usuario con ese nombre.
+            return false;
+        } else {
+            return true;
         }
-        
-        // Si ha llegado a este punto eso quiere decir que no hay ninguna coincidencia.
-        return true;
     }
     
     /**
@@ -47,8 +41,8 @@ public class Signup {
      * @throws SQLException Error de sql.
      * @throws ClassNotFoundException Error de carga de jdbc.
      */
-    public static void register(User u) throws SQLException, ClassNotFoundException {
-        DatabaseHandler dbh = new DatabaseHandler();
-        dbh.insert(DatabaseConnector.getConnection(), u);
+    public void register(User u) throws SQLException, ClassNotFoundException {
+        DBHandler dbh = new DBHandler();
+        dbh.insert(DBConnector.getConnection(), u);
     }
 }

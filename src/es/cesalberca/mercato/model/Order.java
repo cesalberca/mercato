@@ -11,11 +11,6 @@ public class Order {
     private ArrayList<Item> items;
     private User user;
 
-    public Order(ArrayList<Item> items, User user) {
-        this.items = items;
-        this.user = user;
-    }
-
     public Order(int id, ArrayList<Item> items, User user) {
         this.id = id;
         this.items = items;

@@ -11,8 +11,8 @@ public class Item {
     private Category category;
     
     /**
-     * Este constructor
-     * @param name 
+     * Este constructor es utiizado para búsquedas.
+     * @param name Nombre del item.
      */
     public Item(String name) {
         this.name = name;
