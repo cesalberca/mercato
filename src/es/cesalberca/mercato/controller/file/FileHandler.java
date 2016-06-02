@@ -30,24 +30,38 @@ public class FileHandler {
                 pw.println("\t\t<title> Pedidos: "  + u.getName() + "</title>");
             pw.println("\t</head>");
             pw.println("\t<body>");
+            pw.println("\t\t<h1>Usuario: " + u.getName() + "</h1>");
             for (Order order : u.getOrders()) {
-                pw.println("\t\t<table>");
+                pw.println("\t\t<h1>Id de pedido: " + order.getId() + "</h1>");
+                pw.println("\t\t<table border='1' rules='all'>");
+                
+                pw.println("\t\t\t<tr>");
+                pw.print("\t\t\t\t<th>");
+                pw.print("Nombre");
+                pw.println("</th>");
+                pw.print("\t\t\t\t<th>");
+                pw.print("Precio");
+                pw.println("</th>");
+                pw.print("\t\t\t\t<th>");
+                pw.print("Categoría");
+                pw.println("</th>");
+                pw.println("\t\t\t</th>");
+                
                 for (Item item : order.getItems()) {
                     pw.println("\t\t\t<tr>");
-                        pw.println("\t\t\t\t<td>");
-                        pw.print(item.getName());
-                        pw.print("</td>");
-                        pw.println("\t\t\t\t<td>");
-                        pw.print(item.getPrize());
-                        pw.print("</td>");
-                        pw.println("\t\t\t\t<td>");
-                        pw.print(item.getCategory().getName());
-                        pw.print("</td>");
-                        pw.println("\t\t\t\t<td>");
-                        pw.print("</td>");
+                    pw.print("\t\t\t\t<td>");
+                    pw.print(item.getName());
+                    pw.println("</td>");
+                    pw.print("\t\t\t\t<td>");
+                    pw.print(item.getPrize());
+                    pw.println("</td>");
+                    pw.print("\t\t\t\t<td>");
+                    pw.print(item.getCategory().getName());
+                    pw.println("</td>");
                     pw.println("\t\t\t</tr>");
                 }   
                 pw.println("\t\t</table>");
+                pw.println("\t\t<span>Precio total:" + order.getTotalPrizeOrder() + "€ </span>");
             }
             pw.println("\t</body>");
         pw.println("</html>");

@@ -20,7 +20,7 @@ public class JFApp extends javax.swing.JFrame {
   
     public JFApp() {
         initComponents();
-        this.setBounds(100, 100, 600, 800);
+        this.setBounds(100, 100, 500, 400);
         this.setTitle("Mercato");
         this.setVisible(true);
         
@@ -56,7 +56,6 @@ public class JFApp extends javax.swing.JFrame {
         jmiSave = new javax.swing.JMenuItem();
         jbNew = new javax.swing.JMenuItem();
         jbExport = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -92,9 +91,6 @@ public class JFApp extends javax.swing.JFrame {
         jMenu1.add(jbExport);
 
         jMenuBar1.add(jMenu1);
-
-        jMenu2.setText("Editar");
-        jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
 
@@ -200,7 +196,6 @@ public class JFApp extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jbExport;
     private javax.swing.JMenuItem jbNew;

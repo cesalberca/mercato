@@ -28,4 +28,12 @@ public class Order {
     public User getUser() {
         return user;
     }
+    
+    public float getTotalPrizeOrder() {
+        float totalPrize = 0;
+        for (Item item : items) {
+            totalPrize += item.getPrize();
+        }
+        return totalPrize;
+    }
 }
