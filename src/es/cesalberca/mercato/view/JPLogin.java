@@ -46,6 +46,7 @@ public class JPLogin extends javax.swing.JPanel {
                     shop.setUser(new User(userId, userTryingToLogin.getName(), userTryingToLogin.getPassword()));
                     JOptionPane.showMessageDialog(null, "Bienvenido");
                     jpa.jbAddOrder.setEnabled(true);
+                    jpa.unlockButtons();
                 } else {
                     JOptionPane.showMessageDialog(null, "Error al iniciar sesión");
                 }

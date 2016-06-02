@@ -150,12 +150,17 @@ public class JFApp extends javax.swing.JFrame {
     }//GEN-LAST:event_jbExportActionPerformed
 
     private void jbNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbNewActionPerformed
-        if (shop.getItemsOrder().size() > 0) {
-            int response = JOptionPane.showConfirmDialog(null, "Borrarás el pedido actual, ¿estás seguro de querer proceder?", "Nuevo pedido", JOptionPane.YES_NO_OPTION);
-            if (response == JOptionPane.YES_OPTION) {
-                shop.clearOrder();
-                jpa.repaintTable(shop.getItemsOrder());
+        if (shop.getUser() != null) {
+            if (shop.getItemsOrder().size() > 0) {
+                int response = JOptionPane.showConfirmDialog(null, "Borrarás el pedido actual, ¿estás seguro de querer proceder?", "Nuevo pedido", JOptionPane.YES_NO_OPTION);
+                if (response == JOptionPane.YES_OPTION) {
+                    shop.clearOrder();
+                    jpa.repaintTable(shop.getItemsOrder());
+                }
+            
             }
+        } else {
+            JOptionPane.showMessageDialog(null, "Debes iniciar sesión primero.");
         }
     }//GEN-LAST:event_jbNewActionPerformed
 

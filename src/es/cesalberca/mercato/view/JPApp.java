@@ -34,6 +34,8 @@ public class JPApp extends javax.swing.JPanel {
         initComponents();
         this.shop = shop;
         jbAddOrder.setEnabled(false);
+        jcbItems.setEnabled(false);
+        jcbCategories.setEnabled(false);
         
         // Añadimos un listener event para poder capturar el evento del cambio de estado del combo box.
         jcbCategories.addItemListener(new ItemListener() {
@@ -95,11 +97,6 @@ public class JPApp extends javax.swing.JPanel {
         });
 
         jcbCategories.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-------" }));
-        jcbCategories.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jcbCategoriesActionPerformed(evt);
-            }
-        });
 
         jcbItems.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-------" }));
 
@@ -131,28 +128,28 @@ public class JPApp extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jlCategory)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(jcbCategories, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(36, 36, 36)
-                            .addComponent(jlItem)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jcbItems, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(jbAddOrder)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jlCategory)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jcbCategories, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jlItem)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jcbItems, 0, 102, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jbAddOrder))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jbLogin)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jbSignup)))
-                .addContainerGap(12, Short.MAX_VALUE))
+                        .addComponent(jbSignup)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(22, 22, 22)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jbLogin)
                     .addComponent(jbSignup))
@@ -164,8 +161,8 @@ public class JPApp extends javax.swing.JPanel {
                     .addComponent(jcbCategories, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jcbItems, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(60, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -252,6 +249,19 @@ public class JPApp extends javax.swing.JPanel {
         jbSignup.setEnabled(false);
     }
     
+    /**
+     * Desbloquea los botones y carga las categorías.
+     */
+    protected void unlockButtons() {
+        jcbCategories.setEnabled(true);
+        jcbItems.setEnabled(true);
+        
+        if (DBConnector.getConnection() != null) {
+            jcbCategories.removeAllItems();
+            loadCategories();
+        }
+    }
+    
     private void jbLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbLoginActionPerformed
         JPLogin jplogin = new JPLogin(shop, this);
     }//GEN-LAST:event_jbLoginActionPerformed
@@ -264,13 +274,6 @@ public class JPApp extends javax.swing.JPanel {
         addItemToOrder();
         repaintTable(shop.getItemsOrder());
     }//GEN-LAST:event_jbAddOrderActionPerformed
-
-    private void jcbCategoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbCategoriesActionPerformed
-        if (DBConnector.getConnection() != null) {
-            jcbCategories.removeAllItems();
-            loadCategories();
-        }
-    }//GEN-LAST:event_jcbCategoriesActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
