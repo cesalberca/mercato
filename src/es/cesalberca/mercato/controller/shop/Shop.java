@@ -42,6 +42,10 @@ public class Shop {
         dbh.insert(DatabaseConnector.getConnection(), order);
     }
     
+    public void loadOrders() throws SQLException {
+        this.user.setOrders(dbh.getOrdersByUser(DatabaseConnector.getConnection(), this.user.getId()));
+    }
+    
     public ArrayList<Item> getItemsFromDatabase(String category) throws SQLException, ClassNotFoundException {
         ArrayList<Item> items = dbh.searchItemsByCategory(DatabaseConnector.getConnection(), category);
         return items;

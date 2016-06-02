@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * @author César Alberca
  */
 public class Order {
-    int id;
+    private int id;
     private ArrayList<Item> items;
     private User user;
 

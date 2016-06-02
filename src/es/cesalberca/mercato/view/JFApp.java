@@ -136,6 +136,11 @@ public class JFApp extends javax.swing.JFrame {
         FileHandler fh = new FileHandler();
         if (shop.getUser() != null) {
             try {
+                try {
+                    shop.loadOrders();
+                } catch (SQLException ex) {
+                    Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 fh.exportToHtml(shop.getUser());
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);

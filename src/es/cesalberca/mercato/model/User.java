@@ -51,6 +51,10 @@ public class User {
     public ArrayList<Order> getOrders() {
         return orders;
     }
+
+    public void setOrders(ArrayList<Order> orders) {
+        this.orders = orders;
+    }
     
     @Override
     public String toString() {
