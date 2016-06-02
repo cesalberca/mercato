@@ -143,6 +143,54 @@ public class DatabaseHandler {
     }
     
     /**
+     * Busca un item por id.
+     * @param c Conexión a la bbdd.
+     * @param id Id a buscar.
+     * @return Item encontrado.
+     * @throws SQLException 
+     */
+    public Item getItemById(Connection c, int id) throws SQLException {
+        PreparedStatement ps = null;
+        Item i = null;
+        String selectSQL = "SELECT * FROM ITEM WHERE ID = ?";
+        ps = c.prepareStatement(selectSQL);
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+        Category category;
+        
+        while(rs.next()) {
+            category = this.getCategoryById(c, rs.getInt("ID_CATEGORY"));
+            i = new Item(rs.getInt("ID"), rs.getString("NAME"), rs.getFloat("PRIZE") / 100, category);
+        }
+        
+        return i;
+    }
+    
+    /**
+     * Devuelve un usuario de la base de datos dado su id.
+     * @param c
+     * @param id
+     * @return
+     * @throws SQLException 
+     */
+    public User getUserById(Connection c, int id) throws SQLException {
+        PreparedStatement ps = null;
+        String selectSQL = "SELECT * FROM USER WHERE ID = ?";
+        ps = c.prepareStatement(selectSQL);
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+        User user = null;
+        
+        if(rs.next()) {
+            user = new User(rs.getInt("ID"), rs.getString("NAME"), rs.getString("PASSWORD"));
+        }
+        
+        return user;
+    }
+    
+    
+    
+    /**
      * Busca items basados en su categoría.
      * @param c Conexión a la base de datos.
      * @param sCategory Categoría por la que filtrar.
@@ -169,6 +217,12 @@ public class DatabaseHandler {
         return items;
     }
     
+    /**
+     * Devuelve un arraylist de categorias de la base de datos.
+     * @param c
+     * @return
+     * @throws SQLException 
+     */
     public ArrayList<Category> getCategories(Connection c) throws SQLException {
         ArrayList<Category> categories = new ArrayList<>();
         String selectSQL = "SELECT * FROM Category;";
@@ -224,18 +278,60 @@ public class DatabaseHandler {
         
         return lastId + 1;
     }
-
-    public ArrayList<Order> getOrdersByUser(Connection c, User u) throws SQLException {
+    
+    /**
+     * Devuelve un pedido de la base de datos dado su id.
+     * @param c
+     * @param id
+     * @return
+     * @throws SQLException 
+     */
+    public Order getOrderById(Connection c, int id) throws SQLException {
         PreparedStatement ps = null;
-        String selectSQL = "SELECT * FROM CATEGORY WHERE ID = ?";
-        ps = c.prepareStatement(selectSQL);
+        String selectSQL = "SELECT OI.*, U.ID\n" +
+        "FROM ORDER_ITEM OI, USER U, USER_ORDER UO\n" +
+        "WHERE OI.ID_ORDER = UO.ID_ORDER AND U.ID = UO.ID_USER AND OI.ID_ORDER = ?";
+        ps.setInt(1, id);
         ResultSet rs = ps.executeQuery();
+        Order order = null;
+        User user = null;
+        Item item = null;
         Category category = null;
+        ArrayList<Item> items = new ArrayList<>();
         
         while(rs.next()) {
-            category = new Category(rs.getString("NAME"), rs.getInt("ID"));
+            user = getUserById(c, rs.getInt("U.ID"));
+            category = getCategoryById(c, rs.getInt("I.ID_CATEGORY"));
+            item = getItemById(c, rs.getInt("I.ID"));
+            items.add(item);
         }
         
-        return new ArrayList<>();
+        order = new Order(items, user);
+        return order;
+    }
+    
+    /**
+     * Busca todos los pedidos de un usuario dado su id.
+     * @param c Conexión a la base de datos.
+     * @param i Id del usuario.
+     * @return ArrayList de pedidos de ese usuario.
+     * @throws SQLException Error de sql.
+     */
+    public ArrayList<Order> getOrdersByUser(Connection c, int id) throws SQLException {
+        PreparedStatement ps = null;
+        String selectSQL = "SELECT *\n" +
+        "FROM USER_ORDER\n" +
+        "WHERE ID_USER = ?;";
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+        ArrayList<Order> orders = new ArrayList<>();
+        Order order = null;
+        
+        while(rs.next()) {
+            order = getOrderById(c, rs.getInt("ID_ORDER"));
+            orders.add(order);
+        }
+        
+        return orders;
     }
 }

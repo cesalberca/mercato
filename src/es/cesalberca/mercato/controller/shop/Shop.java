@@ -38,6 +38,7 @@ public class Shop {
     public void checkout() throws SQLException, ClassNotFoundException {
         int orderId = dbh.getLastId(DatabaseConnector.getConnection(), "ORDER");
         Order order = new Order(orderId, this.itemsOrder, this.user);
+        //this.user.getOrders().add(order);
         dbh.insert(DatabaseConnector.getConnection(), order);
     }
     

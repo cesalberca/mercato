@@ -4,6 +4,7 @@ import es.cesalberca.mercato.controller.database.DatabaseConnector;
 import es.cesalberca.mercato.controller.database.DatabaseHandler;
 import es.cesalberca.mercato.controller.file.FileHandler;
 import es.cesalberca.mercato.controller.shop.Shop;
+import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -133,6 +134,13 @@ public class JFApp extends javax.swing.JFrame {
 
     private void jbExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbExportActionPerformed
         FileHandler fh = new FileHandler();
+        if (shop.getUser() != null) {
+            try {
+                fh.exportToHtml(shop.getUser());
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }//GEN-LAST:event_jbExportActionPerformed
 
     private void jbNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbNewActionPerformed
