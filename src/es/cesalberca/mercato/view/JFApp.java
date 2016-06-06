@@ -1,5 +1,6 @@
 package es.cesalberca.mercato.view;
 
+import com.itextpdf.text.DocumentException;
 import es.cesalberca.mercato.controller.database.DBConnector;
 import es.cesalberca.mercato.controller.database.DBHandler;
 import es.cesalberca.mercato.controller.file.FileHandler;
@@ -55,7 +56,9 @@ public class JFApp extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         jmiSave = new javax.swing.JMenuItem();
         jbNew = new javax.swing.JMenuItem();
-        jbExport = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        jmGenerateHtml = new javax.swing.JMenuItem();
+        jtmGeneratePdf = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -82,13 +85,25 @@ public class JFApp extends javax.swing.JFrame {
         });
         jMenu1.add(jbNew);
 
-        jbExport.setText("Generar");
-        jbExport.addActionListener(new java.awt.event.ActionListener() {
+        jMenu2.setText("Generar");
+
+        jmGenerateHtml.setText("HTML");
+        jmGenerateHtml.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbExportActionPerformed(evt);
+                jmGenerateHtmlActionPerformed(evt);
             }
         });
-        jMenu1.add(jbExport);
+        jMenu2.add(jmGenerateHtml);
+
+        jtmGeneratePdf.setText("PDF");
+        jtmGeneratePdf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtmGeneratePdfActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jtmGeneratePdf);
+
+        jMenu1.add(jMenu2);
 
         jMenuBar1.add(jMenu1);
 
@@ -128,27 +143,6 @@ public class JFApp extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jmiSaveActionPerformed
 
-    private void jbExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbExportActionPerformed
-        FileHandler fh = new FileHandler();
-        if (shop.getUser() != null) {
-            try {
-                try {
-                    shop.loadOrders();
-                } catch (SQLException ex) {
-                    Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);
-                    JOptionPane.showMessageDialog(null, "Pedidos del usuario no disponibles.");
-                }
-                fh.exportToHtml(shop.getUser());
-                JOptionPane.showMessageDialog(null, "Fichero generado con éxito.");
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(null, "Error al generar el fichero.");
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Debes iniciar sesión primero.");
-        }
-    }//GEN-LAST:event_jbExportActionPerformed
-
     private void jbNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbNewActionPerformed
         if (shop.getUser() != null) {
             if (shop.getItemsOrder().size() > 0) {
@@ -163,6 +157,44 @@ public class JFApp extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Debes iniciar sesión primero.");
         }
     }//GEN-LAST:event_jbNewActionPerformed
+
+    private void jmGenerateHtmlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmGenerateHtmlActionPerformed
+        FileHandler fh = new FileHandler();
+        if (shop.getUser() != null) {
+            try {
+                shop.loadOrders();
+                fh.exportToHtml(shop.getUser());
+                JOptionPane.showMessageDialog(null, "Fichero generado con éxito.");
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, "Error al generar el fichero.");
+            } catch (SQLException ex) {
+                Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, "Pedidos del usuario no disponibles.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Debes iniciar sesión primero.");
+        }
+    }//GEN-LAST:event_jmGenerateHtmlActionPerformed
+
+    private void jtmGeneratePdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtmGeneratePdfActionPerformed
+        FileHandler fh = new FileHandler();
+        if (shop.getUser() != null) {
+            try {
+                shop.loadOrders();
+                fh.exportToPdf(shop.getUser());
+                JOptionPane.showMessageDialog(null, "Fichero generado con éxito.");
+            } catch (DocumentException | FileNotFoundException ex) {
+                Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, "Error al generar el fichero.");
+            } catch (SQLException ex) {
+                Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, "Pedidos del usuario no disponibles.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Debes iniciar sesión primero.");
+        }
+    }//GEN-LAST:event_jtmGeneratePdfActionPerformed
 
     /**
      * @param args the command line arguments
@@ -201,9 +233,11 @@ public class JFApp extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jbExport;
     private javax.swing.JMenuItem jbNew;
+    private javax.swing.JMenuItem jmGenerateHtml;
     protected javax.swing.JMenuItem jmiSave;
+    private javax.swing.JMenuItem jtmGeneratePdf;
     // End of variables declaration//GEN-END:variables
 }
