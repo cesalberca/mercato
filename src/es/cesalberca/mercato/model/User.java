@@ -57,6 +57,21 @@ public class User {
         this.orders = orders;
     }
     
+    /**
+     * Devuelve el precio total gastado por usuario en items comprados.
+     * @return Precio total gastado.
+     */
+    public float getTotalPrizeOrders() {
+        float totalPrice = 0;
+        for (Order order : orders) {
+            for (Item item : order.getItems()) {
+                totalPrice += item.getPrize();
+            }
+        }
+        
+        return totalPrice;
+    }
+    
     @Override
     public String toString() {
         return "User{" + "id=" + id + ", name=" + name + ", password=" + password + ", orders=" + orders + '}';
