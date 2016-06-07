@@ -19,6 +19,8 @@ import com.itextpdf.text.Section;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import java.io.File;
+import java.io.UnsupportedEncodingException;
 
 
 /**
@@ -32,15 +34,16 @@ public class FileHandler {
      * @param u Usuario del que se generarán los datos.
      * @throws FileNotFoundException Fichero no encontrado.
      */
-    public void exportToHtml(User u) throws FileNotFoundException {
+    public void exportToHtml(User u) throws FileNotFoundException, UnsupportedEncodingException {
         DBHandler dbh = new DBHandler();
         PrintWriter pw = null;
         
-        pw = new PrintWriter(u.getName() + ".html");
-        pw.println("<!DOCTYPE html>");
+        pw = new PrintWriter(new File(u.getName() + ".html"), "UTF-8");
+        
+        pw.println("<!doctype html>");
         pw.println("<html>");
             pw.println("\t<head>");
-                pw.println("\t\t<meta charset='UTF-8'>");
+                pw.println("\t\t<meta charset=\"UTF-8\">");
                 pw.println("\t\t<title> Pedidos: "  + u.getName() + "</title>");
             pw.println("\t</head>");
             pw.println("\t<body>");
@@ -117,7 +120,7 @@ public class FileHandler {
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
 
-        cell = new PdfPCell(new Phrase("Precio"));
+        cell = new PdfPCell(new Phrase("Precio (€)"));
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(cell);
 

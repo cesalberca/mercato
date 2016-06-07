@@ -6,6 +6,7 @@ import es.cesalberca.mercato.controller.database.DBHandler;
 import es.cesalberca.mercato.controller.file.FileHandler;
 import es.cesalberca.mercato.controller.shop.Shop;
 import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -172,6 +173,9 @@ public class JFApp extends javax.swing.JFrame {
             } catch (SQLException ex) {
                 Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(null, "Pedidos del usuario no disponibles.");
+            } catch (UnsupportedEncodingException ex) {
+                Logger.getLogger(JFApp.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, "Encoding no permitido.");
             }
         } else {
             JOptionPane.showMessageDialog(null, "Debes iniciar sesión primero.");
