@@ -145,6 +145,7 @@ public class JFApp extends javax.swing.JFrame {
 
     private void jbNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbNewActionPerformed
         if (shop.getUser() != null) {
+            // Comprobamos que el pedido es mayor que 0.
             if (shop.getItemsOrder().size() > 0) {
                 int response = JOptionPane.showConfirmDialog(null, "Borrarás el pedido actual, ¿estás seguro de querer proceder?", "Nuevo pedido", JOptionPane.YES_NO_OPTION);
                 if (response == JOptionPane.YES_OPTION) {

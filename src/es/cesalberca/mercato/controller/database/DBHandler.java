@@ -116,7 +116,7 @@ public class DBHandler {
      * @param c Conexión a la base de datos.
      * @param searchedItem Item a buscar.
      * @return Item encontrado.
-     * @throws SQLException 
+     * @throws SQLException Error de sql.
      */
     public Object search(Connection c, Item searchedItem) throws SQLException {
         PreparedStatement ps = null;
@@ -139,18 +139,18 @@ public class DBHandler {
     /**
      * Busca un item por id.
      * @param c Conexión a la bbdd.
-     * @param id Id a buscar.
+     * @param idItem Id a buscar.
      * @return Item encontrado.
-     * @throws SQLException 
+     * @throws SQLException Error de sql.
      */
-    public Item getItemById(Connection c, int id) throws SQLException {
+    public Item getItemById(Connection c, int idItem) throws SQLException {
         PreparedStatement ps = null;
         Item item = null;
         Category category = null;
         
         String selectSQL = "SELECT * FROM ITEM WHERE ID = ?";
         ps = c.prepareStatement(selectSQL);
-        ps.setInt(1, id);
+        ps.setInt(1, idItem);
         ResultSet rs = ps.executeQuery();
         
         while(rs.next()) {
@@ -164,17 +164,17 @@ public class DBHandler {
     /**
      * Devuelve un usuario de la base de datos dado su id.
      * @param c Conexión a la base de datos.
-     * @param id Id del usuario.
+     * @param idUsuaio Id del usuario.
      * @return Usuario encontrado.
      * @throws SQLException Error de sql.
      */
-    public User getUserById(Connection c, int id) throws SQLException {
+    public User getUserById(Connection c, int idUsuaio) throws SQLException {
         PreparedStatement ps = null;
         User user = null;
         
         String selectSQL = "SELECT * FROM USER WHERE ID = ?";
         ps = c.prepareStatement(selectSQL);
-        ps.setInt(1, id);
+        ps.setInt(1, idUsuaio);
         ResultSet rs = ps.executeQuery();
         
         if(rs.next()) {
@@ -235,17 +235,17 @@ public class DBHandler {
     /**
      * Busca una categoría por id.
      * @param c Conexión a la base de datos.
-     * @param categoryId Id de la categoría a buscar.
+     * @param idCategory Id de la categoría a buscar.
      * @return La categoría encontrada.
      * @throws SQLException Error de sql.
      */
-    public Category getCategoryById(Connection c, int categoryId) throws SQLException {
+    public Category getCategoryById(Connection c, int idCategory) throws SQLException {
         PreparedStatement ps = null;
         Category category = null;
         
         String selectSQL = "SELECT * FROM CATEGORY WHERE ID = ?";
         ps = c.prepareStatement(selectSQL);
-        ps.setInt(1, categoryId);
+        ps.setInt(1, idCategory);
         ResultSet rs = ps.executeQuery();
         
         while(rs.next()) {
@@ -258,15 +258,16 @@ public class DBHandler {
     /**
      * Devuelve un pedido de la base de datos dado su id.
      * @param c Conexión a base de datos.
-     * @param id Id del pedido.
+     * @param idOrder Id del pedido.
      * @return Pedido encontrado.
      * @throws SQLException Error de sql.
      */
-    public Order getOrderById(Connection c, int id) throws SQLException {
+    public Order getOrderById(Connection c, int idOrder) throws SQLException {
         PreparedStatement ps = null;
         Order order = null;
         User user = null;
         Item item = null;
+        // Inicializamos el id del pedido a -1
         int orderId = -1;
         
         // Buscamos todos los items comprados por un usuario dado y mostramos además a qué id de pedido pertenecen.
@@ -274,7 +275,7 @@ public class DBHandler {
         "FROM ORDER_ITEM OI, USER U, USER_ORDER UO\n" +
         "WHERE OI.ID_ORDER = UO.ID_ORDER AND U.ID = UO.ID_USER AND OI.ID_ORDER = ?;";
         ps = c.prepareStatement(selectSQL);
-        ps.setInt(1, id);
+        ps.setInt(1, idOrder);
         ResultSet rs = ps.executeQuery();
         ArrayList<Item> items = new ArrayList<>();
         
@@ -293,18 +294,18 @@ public class DBHandler {
     /**
      * Busca todos los pedidos de un usuario dado su id.
      * @param c Conexión a la base de datos.
-     * @param id Id del usuario.
+     * @param idUser Id del usuario.
      * @return ArrayList de pedidos de ese usuario.
      * @throws SQLException Error de sql.
      */
-    public ArrayList<Order> getOrdersByUser(Connection c, int id) throws SQLException {
+    public ArrayList<Order> getOrdersByUser(Connection c, int idUser) throws SQLException {
         PreparedStatement ps = null;
         Order order = null;
         ArrayList<Order> orders = new ArrayList<>();
         
         String selectSQL = "SELECT * FROM USER_ORDER WHERE ID_USER = ?;";
         ps = c.prepareStatement(selectSQL);
-        ps.setInt(1, id);
+        ps.setInt(1, idUser);
         ResultSet rs = ps.executeQuery();
         
         while(rs.next()) {
@@ -317,10 +318,10 @@ public class DBHandler {
     
      /**
      * Busca un id disponible de una tabla
-     * @param c
-     * @param table
+     * @param c Conexión a la base de datos.
+     * @param table Tabla de la que se conseguirá un id disponible.
      * @return Id disponible
-     * @throws SQLException 
+     * @throws SQLException Error de sql.
      */
     public int getAvailableId(Connection c, String table) throws SQLException {
         int lastId = -1;
@@ -334,5 +335,4 @@ public class DBHandler {
         
         return lastId + 1;
     }
-    
 }

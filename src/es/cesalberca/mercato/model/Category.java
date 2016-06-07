@@ -10,6 +10,7 @@ public class Category {
 
     /**
      * Construye una categoría a partir del nombre de la misma.
+     * @param id Id de la categoría.
      * @param name Nombre de la categoría.
      */
     public Category(int id, String name) {

@@ -173,7 +173,7 @@ public class JPApp extends javax.swing.JPanel {
     protected void repaintTable(ArrayList<Item> items) {
         Vector headersTable = new Vector();
         headersTable.add("Nombre");
-        headersTable.add("Precio");
+        headersTable.add("Precio (€)");
         headersTable.add("Categoría");
 
         DefaultTableModel dtm = new DefaultTableModel(headersTable, 0);

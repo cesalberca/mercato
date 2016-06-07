@@ -1,7 +1,5 @@
 package es.cesalberca.mercato.controller.file;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.pdf.PdfWriter;
 import es.cesalberca.mercato.controller.database.DBHandler;
 import es.cesalberca.mercato.model.Item;
 import es.cesalberca.mercato.model.Order;
@@ -9,18 +7,12 @@ import es.cesalberca.mercato.model.User;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.FileOutputStream;
-import java.util.Date;
-import com.itextpdf.text.Anchor;
 import com.itextpdf.text.BadElementException;
-import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chapter;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.List;
-import com.itextpdf.text.ListItem;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Section;
@@ -60,7 +52,7 @@ public class FileHandler {
             pw.print("Nombre");
             pw.println("</th>");
             pw.print("\t\t\t\t<th>");
-            pw.print("Precio");
+            pw.print("Precio (€)");
             pw.println("</th>");
             pw.print("\t\t\t\t<th>");
             pw.print("Categoría");
@@ -73,7 +65,7 @@ public class FileHandler {
                     pw.print("\t\t\t\t<td>");
                     pw.print(item.getName());
                     pw.println("</td>");
-                    pw.print("\t\t\t\t<td>");
+                    pw.print("\t\t\t\t<td style='text-align:right;'>");
                     pw.print(item.getPrize());
                     pw.println("</td>");
                     pw.print("\t\t\t\t<td>");
@@ -82,8 +74,9 @@ public class FileHandler {
                     pw.println("\t\t\t</tr>");
                 }   
             }
+            
             pw.println("\t\t</table>");
-            pw.println("\t\t<span>Precio total:" + u.getTotalPrizeOrders() + "€ </span>");
+            pw.println("\t\t<span>Precio total: " + u.getTotalPrizeOrders() + "€ </span>");
             pw.println("\t</body>");
         pw.println("</html>");
         pw.flush();
@@ -102,7 +95,7 @@ public class FileHandler {
         document.open();
 
         Chapter chapter = new Chapter(1);
-        Chunk chunk = new Chunk(user.getName());
+        Chunk chunk = new Chunk("Usuario: " + user.getName());
         chapter.add(chunk);
         createTable(chapter, user);
         chapter.add(new Paragraph("Precio total:" + user.getTotalPrizeOrders() + "€" ));
@@ -114,10 +107,10 @@ public class FileHandler {
     /**
      * Crea una tabla a partir de los pedidos del usuario.
      * @param section Sección donde se meterá la tabla.
-     * @param u Usuario del que se sacará la tabla.
-     * @throws BadElementException 
+     * @param user Usuario del que se sacará la tabla.
+     * @throws BadElementException Error al componer la tabla del pdf.
      */
-    private static void createTable(Section section, User u) throws BadElementException {
+    private static void createTable(Section section, User user) throws BadElementException {
         PdfPTable table = new PdfPTable(3);
 
         PdfPCell cell = new PdfPCell(new Phrase("Nombre"));
@@ -133,7 +126,7 @@ public class FileHandler {
         table.addCell(cell);
         table.setHeaderRows(1);
         
-        for (Order order : u.getOrders()) {
+        for (Order order : user.getOrders()) {
             for (Item item : order.getItems()) {
                 table.addCell(item.getName());
                 table.addCell("" + item.getPrize());

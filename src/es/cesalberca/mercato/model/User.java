@@ -71,9 +71,4 @@ public class User {
         
         return totalPrice;
     }
-    
-    @Override
-    public String toString() {
-        return "User{" + "id=" + id + ", name=" + name + ", password=" + password + ", orders=" + orders + '}';
-    }
 }

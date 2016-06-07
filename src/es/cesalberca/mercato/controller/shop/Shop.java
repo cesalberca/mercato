@@ -45,8 +45,8 @@ public class Shop {
      */
     public void checkout() throws SQLException, ClassNotFoundException {
         // Buscamos un id disponible para el pedido.
-        int orderId = dbh.getAvailableId(DBConnector.getConnection(), "ORDER");
-        Order order = new Order(orderId, this.itemsOrder, this.user);
+        int idOrder = dbh.getAvailableId(DBConnector.getConnection(), "ORDER");
+        Order order = new Order(idOrder, this.itemsOrder, this.user);
         dbh.insert(DBConnector.getConnection(), order);
     }
     

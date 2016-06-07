@@ -23,7 +23,6 @@ public class DBConnector {
 
     /**
      * Consigue una nueva conexión a la base de datos.
-     * @return Conexión a la base de datos.
      * @throws ClassNotFoundException Clase no encontrada.
      * @throws SQLException Error al conectarse.
      */
